@@ -7,6 +7,7 @@ const { dbAsync } = require('../utils/database');
 class DermatologyService {
     constructor() {
         this.apiToken = process.env.HUGGING_FACE_API_TOKEN;
+        console.log('DermatologyService initialized with token:', !!this.apiToken, 'Token prefix:', this.apiToken?.substring(0, 10));
         this.models = {
             // Main skin cancer classification model (available via Inference API)
             skinCancer: 'Anwarkh1/Skin_Cancer-Image_Classification',
