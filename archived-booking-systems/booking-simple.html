@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Consultation - Risa Medical</title>
+    <meta name="description" content="Book your private GP consultation with Dr. Leanne Sheridan. Secure online booking with integrated payment processing.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        .booking-simple-container {
+            padding: 80px 0 40px;
+            min-height: calc(100vh - 300px);
+            background: #f8fafb;
+        }
+        
+        .booking-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            padding: 0 20px;
+        }
+        
+        .booking-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .booking-header p {
+            font-size: 1.125rem;
+            color: #718096;
+            line-height: 1.8;
+        }
+        
+        .booking-options {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .booking-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 3rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .booking-card h2 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        .booking-card p {
+            color: #718096;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .booking-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0 3rem;
+            text-align: left;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .feature-item i {
+            color: #48bb78;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            margin-top: 0.25rem;
+        }
+        
+        .feature-item span {
+            color: #4a5568;
+        }
+        
+        .booking-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+        }
+        
+        .alternative-option {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .alternative-option h3 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        
+        .alternative-option p {
+            color: #718096;
+            margin-bottom: 0.5rem;
+        }
+        
+        .phone-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        @media (max-width: 768px) {
+            .booking-header h1 {
+                font-size: 2rem;
+            }
+            
+            .booking-card {
+                padding: 2rem;
+            }
+            
+            .booking-actions {
+                flex-direction: column;
+            }
+            
+            .btn-large {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <a href="/" class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <div class="logo-text">
+                            <span class="logo-name">Risa Medical</span>
+                            <span class="logo-tagline">Private Healthcare Excellence</span>
+                        </div>
+                    </a>
+                    
+                    <nav class="nav-menu">
+                        <a href="/" class="nav-link">Home</a>
+                        <a href="/#services" class="nav-link">Services</a>
+                        <a href="/#contact" class="nav-link">Contact</a>
+                        <a href="/patient-portal.html" class="nav-link">Patient Portal</a>
+                    </nav>
+                    
+                    <button class="mobile-toggle" aria-label="Toggle menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Booking Section -->
+    <section class="booking-simple-container">
+        <div class="container">
+            <div class="booking-header">
+                <h1>Book Your Consultation</h1>
+                <p>Choose your preferred booking method below. Our secure online system offers instant confirmation and payment processing.</p>
+            </div>
+
+            <div class="booking-options">
+                <!-- Online Booking Option -->
+                <div class="booking-card">
+                    <i class="fas fa-calendar-check" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                    <h2>Book Online</h2>
+                    <p>Use our secure online booking system for instant confirmation</p>
+                    
+                    <div class="booking-features">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>View real-time availability</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Choose your preferred time slot</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Secure online payment</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Instant email confirmation</span>
+                        </div>
+                    </div>
+                    
+                    <div class="booking-actions">
+                        <a href="https://risamedical.simplybook.it" target="_blank" class="btn btn-primary btn-large">
+                            <i class="fas fa-external-link-alt"></i>
+                            Book Online Now
+                        </a>
+                        <button onclick="showEmbedded()" class="btn btn-secondary btn-large">
+                            <i class="fas fa-window-maximize"></i>
+                            Book on This Page
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Phone Booking Option -->
+                <div class="alternative-option">
+                    <i class="fas fa-phone-alt" style="font-size: 2rem; color: #718096; margin-bottom: 1rem;"></i>
+                    <h3>Prefer to Book by Phone?</h3>
+                    <p>Our friendly team is ready to help you schedule your appointment</p>
+                    <div class="phone-number">
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:02893352244">028 9335 2244</a>
+                    </div>
+                    <p><strong>Office Hours:</strong><br>Monday-Friday: 9:00 AM - 5:00 PM</p>
+                </div>
+
+                <!-- Embedded Booking (Hidden by default) -->
+                <div id="embeddedBooking" style="display: none; margin-top: 2rem;">
+                    <div class="booking-card">
+                        <h3>Loading booking system...</h3>
+                        <iframe src="https://risamedical.simplybook.it" 
+                                width="100%" 
+                                height="800" 
+                                frameborder="0" 
+                                style="border-radius: 0.5rem; margin-top: 1rem;">
+                        </iframe>
+                        <button onclick="hideEmbedded()" class="btn btn-secondary" style="margin-top: 1rem;">
+                            <i class="fas fa-times"></i> Close Booking System
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>Risa Medical</span>
+                    </div>
+                    <p>Private healthcare excellence with Dr. Leanne Sheridan</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/#about">About Dr. Sheridan</a></li>
+                            <li><a href="/#services">Our Services</a></li>
+                            <li><a href="/#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Risa Medical. All rights reserved.</p>
+                <div class="footer-legal">
+                    <a href="/privacy-policy.html">Privacy Policy</a>
+                    <a href="/terms.html">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function showEmbedded() {
+            document.getElementById('embeddedBooking').style.display = 'block';
+            document.getElementById('embeddedBooking').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function hideEmbedded() {
+            document.getElementById('embeddedBooking').style.display = 'none';
+        }
+    </script>
+    
+    <script src="scripts.js"></script>
+    <script src="cookie-consent.js"></script>
+</body>
+</html>

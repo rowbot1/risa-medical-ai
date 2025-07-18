@@ -1,0 +1,18 @@
+# Robots.txt for Risa Medical
+# https://www.risamedical.co.uk/
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin and API endpoints
+Disallow: /api/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /server/
+
+# Sitemap location
+Sitemap: https://www.risamedical.co.uk/sitemap.xml
+
+# Crawl delay (in seconds) - be respectful to server resources
+Crawl-delay: 1

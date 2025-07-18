@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Risa Medical + Twenty CRM Enhanced Platform Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .demo-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .demo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .demo-card h3 {
+            color: #007AFF;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .demo-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .demo-button {
+            display: inline-block;
+            background: #007AFF;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+        
+        .demo-button:hover {
+            background: #0051D5;
+        }
+        
+        .demo-button.secondary {
+            background: #34C759;
+        }
+        
+        .demo-button.secondary:hover {
+            background: #2AA347;
+        }
+        
+        .features-section {
+            background: white;
+            border-radius: 12px;
+            padding: 3rem;
+            margin-top: 3rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .features-section h2 {
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-item {
+            text-align: center;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .feature-item h4 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-item p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+        
+        .status-badge.active {
+            background: #34C759;
+            color: white;
+        }
+        
+        .status-badge.demo {
+            background: #FF9500;
+            color: white;
+        }
+        
+        .architecture-section {
+            margin-top: 3rem;
+            background: white;
+            border-radius: 12px;
+            padding: 3rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .architecture-diagram {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏥 Risa Medical Enhanced Platform</h1>
+        <p>Enterprise Healthcare Management with Twenty CRM Integration</p>
+    </div>
+    
+    <div class="container">
+        <div class="demo-grid">
+            <div class="demo-card">
+                <h3>Patient Portal <span class="status-badge active">Active</span></h3>
+                <p>The existing Risa Medical patient portal where patients can book appointments, view their medical records, and communicate with the practice.</p>
+                <a href="http://localhost:8080" class="demo-button">Access Patient Portal</a>
+            </div>
+            
+            <div class="demo-card">
+                <h3>Twenty CRM Interface <span class="status-badge demo">Demo Mode</span></h3>
+                <p>Advanced CRM features for staff including 360° patient views, workflow automation, analytics, and task management.</p>
+                <a href="#" onclick="showDemo()" class="demo-button secondary">View Demo</a>
+            </div>
+            
+            <div class="demo-card">
+                <h3>Integration Dashboard <span class="status-badge demo">Demo Mode</span></h3>
+                <p>Monitor real-time data sync between Risa Medical and Twenty CRM, view system health, and manage integration settings.</p>
+                <a href="#" onclick="showIntegration()" class="demo-button">View Integration</a>
+            </div>
+        </div>
+        
+        <div class="features-section">
+            <h2>✨ Enhanced Platform Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">👥</div>
+                    <h4>360° Patient View</h4>
+                    <p>Complete patient history, appointments, and communications in one place</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔄</div>
+                    <h4>Workflow Automation</h4>
+                    <p>Automated appointment reminders, follow-ups, and task creation</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <h4>Advanced Analytics</h4>
+                    <p>Practice insights, revenue tracking, and patient retention metrics</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔒</div>
+                    <h4>HIPAA Compliant</h4>
+                    <p>Secure data storage, encrypted communications, and audit trails</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔗</div>
+                    <h4>Real-time Sync</h4>
+                    <p>Seamless data synchronization between Risa Medical and Twenty CRM</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📱</div>
+                    <h4>Modern UI/UX</h4>
+                    <p>Intuitive interface for staff with drag-and-drop functionality</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="architecture-section">
+            <h2>🏗️ Platform Architecture</h2>
+            <div class="architecture-diagram">
+                <pre>
+┌─────────────────────────────────────────────────────────────┐
+│                    Frontend (React/HTML/JS)                 │
+│                         Port: 8080                          │
+└──────────────────────┬──────────────────────────────────────┘
+                       │
+┌──────────────────────┴──────────────────────────────────────┐
+│                    Proxy Server (Express)                    │
+│                  Routes API calls to services                │
+└──────────────┬─────────────────────────┬────────────────────┘
+               │                         │
+┌──────────────┴───────────┐  ┌─────────┴────────────────────┐
+│   Risa Medical Backend   │  │   Integration Service        │
+│   (Node.js/Express)      │  │   (Node.js/Express)          │
+│   Port: 5001             │  │   Port: 4000                 │
+│   - Patient Management   │  │   - Data Sync                │
+│   - Appointments         │  │   - Webhook Processing       │
+│   - Medical Records      │  │   - Queue Management         │
+│   - Authentication       │  │   - Real-time Updates        │
+└──────────┬───────────────┘  └─────────┬────────────────────┘
+           │                             │
+┌──────────┴───────────────┐  ┌─────────┴────────────────────┐
+│   SQLite Database        │  │   Twenty CRM                 │
+│   - Patient Data         │  │   (GraphQL API)              │
+│   - Appointments         │  │   Port: 3000                 │
+│   - Medical Records      │  │   - CRM Features             │
+│   - Audit Logs           │  │   - Workflow Engine          │
+└──────────────────────────┘  │   - Analytics                │
+                              └──────────┬────────────────────┘
+                                         │
+                              ┌──────────┴────────────────────┐
+                              │   PostgreSQL + Redis          │
+                              │   - Twenty Data              │
+                              │   - Queue Storage            │
+                              └───────────────────────────────┘
+                </pre>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showDemo() {
+            alert('Twenty CRM Demo\n\nThe full Twenty CRM interface would be available at http://localhost:3002 when Docker services are running.\n\nKey features include:\n- 360° patient view with timeline\n- Kanban boards for appointment management\n- Automated workflow builder\n- Analytics dashboards\n- Task management system');
+        }
+        
+        function showIntegration() {
+            alert('Integration Dashboard\n\nThe integration service would be available at http://localhost:4000 when running.\n\nFeatures include:\n- Real-time sync status\n- Queue monitoring\n- Error logs\n- Performance metrics\n- Configuration management');
+        }
+    </script>
+</body>
+</html>

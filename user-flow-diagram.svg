@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1400" width="1200" height="1400">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="patientGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="adminGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Shadows -->
+    <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="1400" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="600" y="40" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#1a202c">
+    Risa Medical - User Journey Flow
+  </text>
+  
+  <!-- Patient Flow -->
+  <g id="patient-flow">
+    <text x="300" y="100" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Patient Journey
+    </text>
+    
+    <!-- Start -->
+    <circle cx="300" cy="150" r="30" fill="url(#patientGradient)" filter="url(#dropShadow)"/>
+    <text x="300" y="155" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+      START
+    </text>
+    
+    <!-- Landing Page -->
+    <rect x="200" y="210" width="200" height="80" rx="10" fill="white" stroke="#667eea" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="300" y="235" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Landing Page
+    </text>
+    <text x="300" y="255" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#4a5568">
+      • View Services
+    </text>
+    <text x="300" y="270" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#4a5568">
+      • Read About Doctor
+    </text>
+    
+    <!-- Decision: New or Existing -->
+    <polygon points="300,320 350,370 300,420 250,370" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="300" y="375" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#92400e">
+      New Patient?
+    </text>
+    
+    <!-- New Patient Path -->
+    <rect x="100" y="460" width="160" height="80" rx="10" fill="white" stroke="#667eea" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="180" y="485" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Cal.com Booking
+    </text>
+    <text x="180" y="505" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Select Service
+    </text>
+    <text x="180" y="520" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Choose Date/Time
+    </text>
+    
+    <!-- Registration -->
+    <rect x="100" y="580" width="160" height="80" rx="10" fill="white" stroke="#667eea" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="180" y="605" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Register Account
+    </text>
+    <text x="180" y="625" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Personal Details
+    </text>
+    <text x="180" y="640" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Medical History
+    </text>
+    
+    <!-- Existing Patient Path -->
+    <rect x="340" y="460" width="160" height="80" rx="10" fill="white" stroke="#667eea" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="420" y="485" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Patient Login
+    </text>
+    <text x="420" y="505" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Email/Password
+    </text>
+    <text x="420" y="520" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • 2FA (Future)
+    </text>
+    
+    <!-- Dashboard -->
+    <rect x="200" y="700" width="200" height="100" rx="10" fill="#e0e7ff" stroke="#667eea" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="300" y="730" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Patient Dashboard
+    </text>
+    <text x="300" y="750" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • View Appointments
+    </text>
+    <text x="300" y="765" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Medical Records
+    </text>
+    <text x="300" y="780" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Upload Documents
+    </text>
+    
+    <!-- Actions from Dashboard -->
+    <rect x="50" y="850" width="140" height="70" rx="10" fill="white" stroke="#667eea" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="120" y="875" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Book New
+    </text>
+    <text x="120" y="895" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Cal.com
+    </text>
+    <text x="120" y="910" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Integration
+    </text>
+    
+    <rect x="210" y="850" width="140" height="70" rx="10" fill="white" stroke="#667eea" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="280" y="875" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Manage Appts
+    </text>
+    <text x="280" y="895" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Reschedule
+    </text>
+    <text x="280" y="910" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Cancel
+    </text>
+    
+    <rect x="370" y="850" width="140" height="70" rx="10" fill="white" stroke="#667eea" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="440" y="875" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Upload Files
+    </text>
+    <text x="440" y="895" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Lab Results
+    </text>
+    <text x="440" y="910" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Documents
+    </text>
+    
+    <!-- Messages -->
+    <rect x="200" y="960" width="200" height="80" rx="10" fill="white" stroke="#667eea" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="300" y="985" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Secure Messaging
+    </text>
+    <text x="300" y="1005" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Contact Doctor
+    </text>
+    <text x="300" y="1020" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • View Responses
+    </text>
+    
+    <!-- Appointment Day -->
+    <rect x="200" y="1080" width="200" height="80" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="300" y="1105" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#92400e">
+      Appointment Day
+    </text>
+    <text x="300" y="1125" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#92400e">
+      • Attend Consultation
+    </text>
+    <text x="300" y="1140" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#92400e">
+      • Receive Treatment
+    </text>
+    
+    <!-- Post Appointment -->
+    <rect x="200" y="1200" width="200" height="80" rx="10" fill="#d1fae5" stroke="#10b981" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="300" y="1225" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#065f46">
+      Post-Appointment
+    </text>
+    <text x="300" y="1245" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#065f46">
+      • View Notes
+    </text>
+    <text x="300" y="1260" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#065f46">
+      • Download Records
+    </text>
+  </g>
+  
+  <!-- Admin Flow -->
+  <g id="admin-flow" transform="translate(600, 0)">
+    <text x="300" y="100" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Admin Journey
+    </text>
+    
+    <!-- Start -->
+    <circle cx="300" cy="150" r="30" fill="url(#adminGradient)" filter="url(#dropShadow)"/>
+    <text x="300" y="155" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white">
+      START
+    </text>
+    
+    <!-- Admin Login -->
+    <rect x="200" y="210" width="200" height="80" rx="10" fill="white" stroke="#f093fb" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="300" y="235" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Admin Login
+    </text>
+    <text x="300" y="255" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#4a5568">
+      • Secure Portal
+    </text>
+    <text x="300" y="270" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#4a5568">
+      • 2FA Required
+    </text>
+    
+    <!-- Admin Dashboard -->
+    <rect x="200" y="330" width="200" height="100" rx="10" fill="#fce7f3" stroke="#f093fb" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="300" y="360" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Admin Dashboard
+    </text>
+    <text x="300" y="380" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Today's Schedule
+    </text>
+    <text x="300" y="395" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Patient Queue
+    </text>
+    <text x="300" y="410" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Statistics
+    </text>
+    
+    <!-- Admin Actions -->
+    <rect x="50" y="470" width="140" height="70" rx="10" fill="white" stroke="#f093fb" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="120" y="495" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Manage Patients
+    </text>
+    <text x="120" y="515" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • View Records
+    </text>
+    <text x="120" y="530" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Update Info
+    </text>
+    
+    <rect x="210" y="470" width="140" height="70" rx="10" fill="white" stroke="#f093fb" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="280" y="495" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Schedule
+    </text>
+    <text x="280" y="515" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • View Calendar
+    </text>
+    <text x="280" y="530" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Block Times
+    </text>
+    
+    <rect x="370" y="470" width="140" height="70" rx="10" fill="white" stroke="#f093fb" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="440" y="495" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Messages
+    </text>
+    <text x="440" y="515" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Read Messages
+    </text>
+    <text x="440" y="530" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Send Replies
+    </text>
+    
+    <!-- During Appointment -->
+    <rect x="200" y="580" width="200" height="80" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="300" y="605" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#92400e">
+      During Consultation
+    </text>
+    <text x="300" y="625" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#92400e">
+      • Access Patient History
+    </text>
+    <text x="300" y="640" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#92400e">
+      • View Uploaded Files
+    </text>
+    
+    <!-- Create Records -->
+    <rect x="200" y="700" width="200" height="80" rx="10" fill="white" stroke="#f093fb" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="300" y="725" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Create Records
+    </text>
+    <text x="300" y="745" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Consultation Notes
+    </text>
+    <text x="300" y="760" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Prescriptions
+    </text>
+    
+    <!-- Follow-up -->
+    <rect x="200" y="820" width="200" height="80" rx="10" fill="#d1fae5" stroke="#10b981" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="300" y="845" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#065f46">
+      Follow-up Actions
+    </text>
+    <text x="300" y="865" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#065f46">
+      • Schedule Follow-up
+    </text>
+    <text x="300" y="880" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#065f46">
+      • Send Instructions
+    </text>
+    
+    <!-- Reports -->
+    <rect x="200" y="940" width="200" height="80" rx="10" fill="white" stroke="#f093fb" stroke-width="2" filter="url(#dropShadow)"/>
+    <text x="300" y="965" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#2d3748">
+      Reports & Analytics
+    </text>
+    <text x="300" y="985" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Patient Statistics
+    </text>
+    <text x="300" y="1000" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4a5568">
+      • Revenue Reports
+    </text>
+  </g>
+  
+  <!-- Flow Arrows -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4a5568" />
+    </marker>
+  </defs>
+  
+  <!-- Patient Flow Arrows -->
+  <path d="M 300 180 L 300 210" stroke="#667eea" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 300 290 L 300 320" stroke="#667eea" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 280 390 L 200 460" stroke="#667eea" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 320 390 L 400 460" stroke="#667eea" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 180 540 L 180 580" stroke="#667eea" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 180 660 L 280 700" stroke="#667eea" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 420 540 L 320 700" stroke="#667eea" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 300 800 L 300 820" stroke="#667eea" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 300 920 L 300 960" stroke="#667eea" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 300 1040 L 300 1080" stroke="#667eea" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 300 1160 L 300 1200" stroke="#667eea" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  
+  <!-- Admin Flow Arrows -->
+  <path d="M 900 180 L 900 210" stroke="#f093fb" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 900 290 L 900 330" stroke="#f093fb" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 900 430 L 900 450" stroke="#f093fb" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 900 540 L 900 580" stroke="#f093fb" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 900 660 L 900 700" stroke="#f093fb" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 900 780 L 900 820" stroke="#f093fb" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 900 900 L 900 940" stroke="#f093fb" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  
+  <!-- Key Features Box -->
+  <rect x="50" y="1320" width="1100" height="60" rx="10" fill="#e6fffa" stroke="#4fd1c5" stroke-width="2"/>
+  <text x="600" y="1345" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#065f46">
+    Key Features
+  </text>
+  <text x="200" y="1365" font-family="Arial, sans-serif" font-size="11" text-anchor="start" fill="#047857">
+    🔒 Secure Authentication  •  📅 Cal.com Integration  •  💳 Stripe Payments  •  📄 Document Upload  •  💬 Messaging  •  📊 Analytics
+  </text>
+</svg>

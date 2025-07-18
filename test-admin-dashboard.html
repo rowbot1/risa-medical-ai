@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .status { 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 5px; 
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+        button { 
+            padding: 10px 20px; 
+            margin: 5px; 
+            cursor: pointer; 
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Authentication Test</h1>
+    
+    <div id="status"></div>
+    
+    <div>
+        <h2>Test Actions:</h2>
+        <button onclick="testLogin()">1. Test Admin Login</button>
+        <button onclick="checkAuth()">2. Check Auth Status</button>
+        <button onclick="checkCookies()">3. Check Cookies</button>
+        <button onclick="testDashboardAPI()">4. Test Dashboard API</button>
+        <button onclick="clearAuth()">5. Clear Auth</button>
+    </div>
+    
+    <div id="results"></div>
+
+    <script src="api.js"></script>
+    <script>
+        const statusDiv = document.getElementById('status');
+        const resultsDiv = document.getElementById('results');
+        
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            statusDiv.appendChild(div);
+        }
+        
+        function showResult(title, data) {
+            resultsDiv.innerHTML += `
+                <h3>${title}</h3>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            `;
+        }
+        
+        async function testLogin() {
+            log('Testing admin login...');
+            try {
+                const result = await window.risaAPI.adminLogin('admin@risamedical.co.uk', 'admin123');
+                log('Login successful!', 'success');
+                showResult('Login Result', result);
+                
+                // Check what's in localStorage
+                showResult('LocalStorage After Login', {
+                    isAuthenticated: localStorage.getItem('isAuthenticated'),
+                    userType: localStorage.getItem('userType'),
+                    authToken: localStorage.getItem('authToken') ? 'Token present' : 'No token',
+                    adminId: localStorage.getItem('adminId'),
+                    adminEmail: localStorage.getItem('adminEmail')
+                });
+            } catch (error) {
+                log(`Login failed: ${error.message}`, 'error');
+                showResult('Login Error', { error: error.message });
+            }
+        }
+        
+        async function checkAuth() {
+            log('Checking authentication status...');
+            try {
+                const result = await window.risaAPI.request('/auth/check');
+                log('Auth check successful!', 'success');
+                showResult('Auth Check Result', result);
+            } catch (error) {
+                log(`Auth check failed: ${error.message}`, 'error');
+                showResult('Auth Check Error', { 
+                    error: error.message,
+                    localStorage: {
+                        authToken: localStorage.getItem('authToken') ? 'Present' : 'Missing'
+                    }
+                });
+            }
+        }
+        
+        function checkCookies() {
+            log('Checking cookies...');
+            const cookies = document.cookie.split(';').map(c => c.trim());
+            showResult('Document Cookies', {
+                cookieCount: cookies.length,
+                cookies: cookies,
+                hasTokenCookie: cookies.some(c => c.startsWith('token='))
+            });
+        }
+        
+        async function testDashboardAPI() {
+            log('Testing dashboard API endpoint...');
+            try {
+                const result = await window.risaAPI.request('/admin/dashboard');
+                log('Dashboard API call successful!', 'success');
+                showResult('Dashboard API Result', result);
+            } catch (error) {
+                log(`Dashboard API failed: ${error.message}`, 'error');
+                showResult('Dashboard API Error', { error: error.message });
+            }
+        }
+        
+        function clearAuth() {
+            log('Clearing authentication...');
+            localStorage.clear();
+            document.cookie.split(';').forEach(cookie => {
+                const eqPos = cookie.indexOf('=');
+                const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+                document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+            });
+            log('Authentication cleared', 'success');
+            resultsDiv.innerHTML = '';
+        }
+        
+        // Check initial state
+        window.addEventListener('DOMContentLoaded', () => {
+            log('Page loaded. Checking initial state...');
+            checkCookies();
+        });
+    </script>
+</body>
+</html>

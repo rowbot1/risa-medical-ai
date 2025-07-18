@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Dashboard Access</title>
+</head>
+<body>
+    <h1>Debug Dashboard Access</h1>
+    
+    <h2>Authentication Status:</h2>
+    <div id="authStatus"></div>
+    
+    <h2>Actions:</h2>
+    <button onclick="checkAuth()">Check Authentication</button>
+    <button onclick="testLogin()">Test Login</button>
+    <button onclick="clearAuth()">Clear Authentication</button>
+    <button onclick="goToDashboard()">Go to Dashboard</button>
+    
+    <h2>Results:</h2>
+    <div id="results"></div>
+    
+    <script src="api.js"></script>
+    <script>
+        function updateStatus() {
+            const status = document.getElementById('authStatus');
+            const cookies = document.cookie;
+            const isAuth = localStorage.getItem('isAuthenticated');
+            
+            status.innerHTML = `
+                <p><strong>Cookies:</strong> ${cookies || 'None'}</p>
+                <p><strong>LocalStorage Auth:</strong> ${isAuth || 'None'}</p>
+                <p><strong>Has Token Cookie:</strong> ${cookies.includes('token=') ? 'Yes' : 'No'}</p>
+            `;
+        }
+        
+        function checkAuth() {
+            updateStatus();
+            document.getElementById('results').innerHTML = 'Auth status updated above.';
+        }
+        
+        async function testLogin() {
+            const results = document.getElementById('results');
+            try {
+                results.innerHTML = 'Logging in...';
+                const result = await window.risaAPI.login('john.doe@example.com', 'Password123');
+                results.innerHTML = `
+                    <p style="color: green;">Login successful!</p>
+                    <p>User: ${result.user.firstName} ${result.user.lastName}</p>
+                `;
+                updateStatus();
+            } catch (error) {
+                results.innerHTML = `<p style="color: red;">Login failed: ${error.message}</p>`;
+            }
+        }
+        
+        function clearAuth() {
+            // Clear cookies
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+            
+            // Clear localStorage
+            localStorage.clear();
+            
+            updateStatus();
+            document.getElementById('results').innerHTML = 'Authentication cleared.';
+        }
+        
+        function goToDashboard() {
+            window.location.href = '/dashboard.html';
+        }
+        
+        // Initial status
+        updateStatus();
+    </script>
+</body>
+</html>

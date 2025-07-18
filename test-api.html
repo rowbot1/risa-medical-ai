@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test - Risa Medical</title>
+</head>
+<body>
+    <h1>API Connection Test</h1>
+    <button id="testBtn">Test API Connection</button>
+    <div id="result"></div>
+
+    <h2>Test Booking</h2>
+    <button id="bookBtn">Test Booking</button>
+    <div id="bookResult"></div>
+
+    <script src="api.js"></script>
+    <script>
+        document.getElementById('testBtn').addEventListener('click', async () => {
+            const resultDiv = document.getElementById('result');
+            try {
+                console.log('Testing API health...');
+                const result = await window.risaAPI.checkHealth();
+                resultDiv.innerHTML = `<p style="color: green;">✓ API Connected! Status: ${result.status}</p>`;
+            } catch (error) {
+                console.error('API Error:', error);
+                resultDiv.innerHTML = `<p style="color: red;">✗ API Error: ${error.message}</p>`;
+            }
+        });
+
+        document.getElementById('bookBtn').addEventListener('click', async () => {
+            const bookResultDiv = document.getElementById('bookResult');
+            try {
+                console.log('Testing booking...');
+                
+                // First check available slots
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const dateStr = tomorrow.toISOString().split('T')[0];
+                
+                console.log('Getting available slots for:', dateStr);
+                const slots = await window.risaAPI.getAvailableSlots(dateStr);
+                console.log('Available slots:', slots);
+                
+                // Try to register a test user
+                const testData = {
+                    email: `test${Date.now()}@example.com`,
+                    password: 'TestPass123',
+                    firstName: 'Test',
+                    lastName: 'User',
+                    phone: '1234567890',
+                    dateOfBirth: '1990-01-01',
+                    gdprConsent: true
+                };
+                
+                console.log('Registering user:', testData);
+                const regResult = await window.risaAPI.register(testData);
+                console.log('Registration result:', regResult);
+                
+                // Try to book appointment
+                const bookingData = {
+                    appointmentDate: dateStr,
+                    appointmentTime: slots.availableSlots[0],
+                    serviceType: 'General Consultation',
+                    notes: 'Test booking'
+                };
+                
+                console.log('Booking appointment:', bookingData);
+                const bookResult = await window.risaAPI.bookAppointment(bookingData);
+                console.log('Booking result:', bookResult);
+                
+                bookResultDiv.innerHTML = `<p style="color: green;">✓ Booking successful! Appointment ID: ${bookResult.appointment.id}</p>`;
+            } catch (error) {
+                console.error('Booking Error:', error);
+                bookResultDiv.innerHTML = `<p style="color: red;">✗ Booking Error: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

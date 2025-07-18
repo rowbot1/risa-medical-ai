@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimplyBook.me Widget Test</title>
+</head>
+<body>
+    <h1>SimplyBook.me Widget Test</h1>
+    <p>Testing the booking widget...</p>
+    
+    <!-- SimplyBook.me Widget -->
+    <script src="https://widget.simplybook.it/v2/widget/widget.js"></script>
+    <script>
+        var widget = new SimplybookWidget({
+            "widget_type": "iframe",
+            "url": "https://risamedical.simplybook.it",
+            "theme": "default",
+            "theme_settings": {
+                "timeline_show_end_time": "1",
+                "sb_base_color": "#2C5282",
+                "hide_past_days": "0",
+                "timeline_hide_unavailable": "1",
+                "hide_company_label": "0"
+            },
+            "timeline": "modern",
+            "datepicker": "top_calendar",
+            "is_rtl": false,
+            "app_config": {
+                "clear_session": 0,
+                "allow_switch_to_ada": 0,
+                "predefined": []
+            }
+        });
+    </script>
+    
+    <p>If you see the booking widget above, it's working!</p>
+</body>
+</html>

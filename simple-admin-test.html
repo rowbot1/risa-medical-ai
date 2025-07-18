@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Admin Test</title>
+</head>
+<body>
+    <h1>Simple Admin Auth Test</h1>
+    <button onclick="doFullTest()">Do Complete Test</button>
+    <div id="output"></div>
+    
+    <script src="api.js"></script>
+    <script>
+        function log(msg) {
+            document.getElementById('output').innerHTML += '<p>' + msg + '</p>';
+            console.log(msg);
+        }
+        
+        async function doFullTest() {
+            document.getElementById('output').innerHTML = '';
+            
+            try {
+                // Step 1: Clear everything
+                log('Step 1: Clearing localStorage...');
+                localStorage.clear();
+                
+                // Step 2: Login
+                log('Step 2: Logging in...');
+                const loginResult = await window.risaAPI.adminLogin('admin@risamedical.com', 'admin123');
+                log('Login successful! User: ' + loginResult.user.name);
+                
+                // Step 3: Store auth data
+                log('Step 3: Storing auth data...');
+                localStorage.setItem('adminEmail', loginResult.user.email);
+                localStorage.setItem('adminName', loginResult.user.name);
+                localStorage.setItem('adminRole', loginResult.user.role);
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('userType', 'admin');
+                
+                if (loginResult.token) {
+                    localStorage.setItem('authToken', loginResult.token);
+                    log('Token stored: ' + loginResult.token.substring(0, 30) + '...');
+                } else {
+                    log('WARNING: No token in login response!');
+                }
+                
+                // Step 4: Test auth check
+                log('Step 4: Testing auth check...');
+                const authResult = await window.risaAPI.request('/auth/check');
+                log('Auth check successful! User type: ' + authResult.userType);
+                
+                // Step 5: Success
+                log('Step 5: All tests passed! Dashboard should work.');
+                
+            } catch (error) {
+                log('ERROR: ' + error.message);
+                console.error('Full error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

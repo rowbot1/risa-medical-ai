@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Consultation - Risa Medical</title>
+    <meta name="description" content="Book your private GP consultation with Dr. Leanne Sheridan. Secure online booking with Cal.com integration.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* Custom styles for Cal.com integration */
+        .booking-hero {
+            background: linear-gradient(135deg, #2C5282 0%, #2D3748 100%);
+            color: white;
+            padding: 4rem 0 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .booking-hero::before {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: white;
+            transform: skewY(-2deg);
+            transform-origin: bottom right;
+        }
+        
+        .booking-hero-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .booking-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .booking-hero p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+        
+        .booking-features-strip {
+            background: white;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            margin-top: -40px;
+            position: relative;
+            z-index: 10;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 0;
+        }
+        
+        .feature-item {
+            padding: 2rem;
+            text-align: center;
+            border-right: 1px solid #E2E8F0;
+            position: relative;
+        }
+        
+        .feature-item:last-child {
+            border-right: none;
+        }
+        
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: #EBF8FF;
+            color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.25rem;
+        }
+        
+        .feature-item h3 {
+            color: #2D3748;
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-item p {
+            color: #718096;
+            font-size: 0.875rem;
+            margin: 0;
+        }
+        
+        .booking-content {
+            padding: 4rem 0;
+            background: #F7FAFC;
+        }
+        
+        .booking-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Cal.com embed container */
+        .cal-embed-container {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            min-height: 600px;
+            position: relative;
+        }
+        
+        .cal-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        .cal-loading i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* Instructions section */
+        .booking-instructions {
+            background: white;
+            border-radius: 1rem;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .booking-instructions h2 {
+            color: #2D3748;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .instructions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .instruction-step {
+            text-align: center;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+        
+        .instruction-step h3 {
+            color: #2D3748;
+            margin-bottom: 0.5rem;
+            font-size: 1.125rem;
+        }
+        
+        .instruction-step p {
+            color: #718096;
+            font-size: 0.875rem;
+        }
+        
+        /* Alternative booking */
+        .alternative-booking {
+            background: linear-gradient(135deg, #F7FAFC 0%, #EDF2F7 100%);
+            border-radius: 1rem;
+            padding: 3rem;
+            text-align: center;
+        }
+        
+        .alternative-booking h3 {
+            color: #2D3748;
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .phone-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 1.5rem 0;
+        }
+        
+        .phone-display i {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+        
+        .phone-display a {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        @media (max-width: 768px) {
+            .booking-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .feature-item {
+                border-right: none;
+                border-bottom: 1px solid #E2E8F0;
+                padding: 1.5rem;
+            }
+            
+            .feature-item:last-child {
+                border-bottom: none;
+            }
+            
+            .cal-embed-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <a href="/" class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <div class="logo-text">
+                            <span class="logo-name">Risa Medical</span>
+                            <span class="logo-tagline">Private Healthcare Excellence</span>
+                        </div>
+                    </a>
+                    
+                    <nav class="nav-menu">
+                        <a href="/" class="nav-link">Home</a>
+                        <a href="/#services" class="nav-link">Services</a>
+                        <a href="/#contact" class="nav-link">Contact</a>
+                        <a href="/patient-portal.html" class="nav-link">Patient Portal</a>
+                    </nav>
+                    
+                    <button class="mobile-toggle" aria-label="Toggle menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="booking-hero">
+        <div class="booking-hero-content">
+            <h1>Book Your Consultation</h1>
+            <p>Schedule your appointment with Dr. Leanne Sheridan using our secure online booking system</p>
+        </div>
+    </section>
+
+    <!-- Features Strip -->
+    <div class="container">
+        <div class="booking-features-strip">
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Real-Time Availability</h3>
+                    <p>See live appointment slots</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Secure & Private</h3>
+                    <p>GDPR & HIPAA compliant</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Instant Confirmation</h3>
+                    <p>Email & calendar invites</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>SMS Reminders</h3>
+                    <p>Never miss an appointment</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Booking Section -->
+    <section class="booking-content">
+        <div class="booking-container">
+            <!-- Booking Instructions -->
+            <div class="booking-instructions">
+                <h2>How to Book Your Appointment</h2>
+                <div class="instructions-grid">
+                    <div class="instruction-step">
+                        <div class="step-number">1</div>
+                        <h3>Select Service</h3>
+                        <p>Choose your consultation type from the options below</p>
+                    </div>
+                    
+                    <div class="instruction-step">
+                        <div class="step-number">2</div>
+                        <h3>Pick Date & Time</h3>
+                        <p>Select from available appointment slots</p>
+                    </div>
+                    
+                    <div class="instruction-step">
+                        <div class="step-number">3</div>
+                        <h3>Enter Details</h3>
+                        <p>Provide your contact information</p>
+                    </div>
+                    
+                    <div class="instruction-step">
+                        <div class="step-number">4</div>
+                        <h3>Confirm Booking</h3>
+                        <p>Receive instant email confirmation</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cal.com Embed Container -->
+            <div class="cal-embed-container">
+                <div class="cal-loading">
+                    <i class="fas fa-heartbeat"></i>
+                    <p style="color: #718096; margin-top: 1rem;">Loading booking calendar...</p>
+                </div>
+                
+                <!-- Cal.com inline embed will be inserted here -->
+                <div id="cal-embed"></div>
+            </div>
+
+            <!-- Alternative Booking Method -->
+            <div class="alternative-booking">
+                <h3>Prefer to Book by Phone?</h3>
+                <p style="color: #718096; margin-bottom: 1rem;">Our friendly team is available to assist you</p>
+                <div class="phone-display">
+                    <i class="fas fa-phone"></i>
+                    <a href="tel:02893352244">028 9335 2244</a>
+                </div>
+                <p style="color: #718096; font-size: 0.875rem;">
+                    <strong>Office Hours:</strong> Monday-Friday, 9:00 AM - 5:00 PM
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>Risa Medical</span>
+                    </div>
+                    <p>Private healthcare excellence with Dr. Leanne Sheridan</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/#about">About Dr. Sheridan</a></li>
+                            <li><a href="/#services">Our Services</a></li>
+                            <li><a href="/#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Risa Medical. All rights reserved.</p>
+                <div class="footer-legal">
+                    <a href="/privacy-policy.html">Privacy Policy</a>
+                    <a href="/terms.html">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cal.com Embed Script -->
+    <script>
+        (function (C, A, L) {
+            let p = function (a, ar) {
+                a.q.push(ar);
+            };
+            let d = C.document;
+            C.Cal = C.Cal || function () {
+                let cal = C.Cal;
+                let ar = arguments;
+                if (!cal.loaded) {
+                    cal.ns = {};
+                    cal.q = cal.q || [];
+                    d.head.appendChild(d.createElement("script")).src = A;
+                    cal.loaded = true;
+                }
+                if (ar[0] === L) {
+                    const api = function () {
+                        p(api, arguments);
+                    };
+                    const namespace = ar[1];
+                    api.q = api.q || [];
+                    typeof namespace === "string" ? (cal.ns[namespace] = api) && p(api, ar) : p(cal, ar);
+                    return;
+                }
+                p(cal, ar);
+            };
+        })(window, "https://app.cal.com/embed/embed.js", "init");
+        
+        Cal("init", {origin:"https://cal.com"});
+        
+        // Cal.com configuration - pulls from config or defaults
+        const calUsername = (window.APP_CONFIG && window.APP_CONFIG.CALCOM_USERNAME) || 'YOUR-CAL-USERNAME';
+        const calEventType = (window.APP_CONFIG && window.APP_CONFIG.CALCOM_EVENT_TYPE) || 'consultation';
+        
+        Cal("inline", {
+            elementOrSelector: "#cal-embed",
+            calLink: `${calUsername}/${calEventType}`,
+            layout: "month_view",
+            config: {
+                theme: "light",
+                styles: {
+                    branding: {
+                        brandColor: "#2C5282"
+                    }
+                },
+                name: "Patient Name",
+                email: "patient@email.com",
+                notes: "Please describe your medical concerns",
+                guests: [],
+                metadata: {
+                    source: "website"
+                }
+            }
+        });
+        
+        // Hide loading message once Cal.com loads
+        Cal("on", {
+            action: "bookingSuccessful",
+            callback: (e) => {
+                // Show success message
+                console.log("Booking successful!", e);
+            }
+        });
+        
+        // Remove loading indicator when Cal.com is ready
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.querySelector('.cal-loading').style.display = 'none';
+            }, 2000);
+        });
+    </script>
+    
+    <script src="config.js"></script>
+    <script src="scripts.js"></script>
+    <script src="cookie-consent.js"></script>
+</body>
+</html>

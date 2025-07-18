@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard - Risa Medical</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: calc(100vh - 70px);
+            background-color: #F7FAFC;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            background-color: white;
+            border-right: 1px solid #E2E8F0;
+            padding: 2rem 0;
+        }
+        
+        .user-info {
+            text-align: center;
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid #E2E8F0;
+            margin-bottom: 2rem;
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+        }
+        
+        .user-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #2D3748;
+            margin-bottom: 0.25rem;
+        }
+        
+        .user-email {
+            font-size: 0.875rem;
+            color: #718096;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 0.25rem;
+        }
+        
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: #4A5568;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-link:hover {
+            background-color: #F7FAFC;
+            color: var(--primary-color);
+        }
+        
+        .sidebar-link.active {
+            background-color: #EBF8FF;
+            color: var(--primary-color);
+            border-right: 3px solid var(--primary-color);
+        }
+        
+        .sidebar-link i {
+            margin-right: 0.75rem;
+            width: 20px;
+        }
+        
+        /* Main Content */
+        .dashboard-main {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-title {
+            font-size: 2rem;
+            color: #1A202C;
+            margin-bottom: 0.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .dashboard-subtitle {
+            color: #718096;
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .stat-info h3 {
+            font-size: 2rem;
+            color: #1A202C;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-info p {
+            color: #718096;
+            margin: 0;
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .stat-icon.blue {
+            background-color: #EBF8FF;
+            color: #2B6CB0;
+        }
+        
+        .stat-icon.green {
+            background-color: #F0FFF4;
+            color: #38A169;
+        }
+        
+        .stat-icon.yellow {
+            background-color: #FFFFF0;
+            color: #D69E2E;
+        }
+        
+        .stat-icon.purple {
+            background-color: #FAF5FF;
+            color: #805AD5;
+        }
+        
+        /* Appointment Section */
+        .section-card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #E2E8F0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            color: #1A202C;
+            margin: 0;
+        }
+        
+        .appointments-list {
+            padding: 1.5rem;
+        }
+        
+        .appointment-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid #E2E8F0;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+        
+        .appointment-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .appointment-date {
+            text-align: center;
+            padding: 0.75rem;
+            background-color: #F7FAFC;
+            border-radius: 0.375rem;
+            min-width: 80px;
+        }
+        
+        .appointment-date .day {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            display: block;
+        }
+        
+        .appointment-date .month {
+            font-size: 0.875rem;
+            color: #718096;
+            text-transform: uppercase;
+        }
+        
+        .appointment-details h4 {
+            margin: 0 0 0.25rem;
+            color: #2D3748;
+        }
+        
+        .appointment-details p {
+            margin: 0;
+            color: #718096;
+            font-size: 0.875rem;
+        }
+        
+        .appointment-status {
+            padding: 0.375rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-confirmed {
+            background-color: #C6F6D5;
+            color: #22543D;
+        }
+        
+        .status-pending {
+            background-color: #FEEBC8;
+            color: #744210;
+        }
+        
+        .status-completed {
+            background-color: #E0E7FF;
+            color: #3730A3;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 1.5rem;
+        }
+        
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem;
+            background-color: #F7FAFC;
+            border: 2px solid transparent;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            color: #4A5568;
+            transition: all 0.2s ease;
+        }
+        
+        .action-btn:hover {
+            border-color: var(--primary-color);
+            background-color: #EBF8FF;
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        .action-btn i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .action-btn span {
+            font-weight: 500;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #718096;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+            color: #CBD5E0;
+        }
+        
+        /* Payment History Styles */
+        .payment-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid #E2E8F0;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+        
+        .payment-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .payment-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #F7FAFC;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+        }
+        
+        .payment-details h4 {
+            margin: 0 0 0.25rem;
+            color: #2D3748;
+        }
+        
+        .payment-details p {
+            margin: 0;
+            color: #718096;
+            font-size: 0.875rem;
+        }
+        
+        .payment-amount {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #2D3748;
+        }
+        
+        .payment-status {
+            padding: 0.375rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-paid {
+            background-color: #C6F6D5;
+            color: #22543D;
+        }
+        
+        .status-pending {
+            background-color: #FEEBC8;
+            color: #744210;
+        }
+        
+        .status-failed {
+            background-color: #FED7D7;
+            color: #742A2A;
+        }
+        
+        .receipt-btn {
+            padding: 0.375rem 0.75rem;
+            background-color: transparent;
+            border: 1px solid #CBD5E0;
+            border-radius: 0.375rem;
+            color: #4A5568;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+        
+        .receipt-btn:hover {
+            background-color: #F7FAFC;
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .dashboard-main {
+                padding: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>Risa Medical</span>
+                </a>
+                
+                <ul class="nav-menu">
+                    <li><a href="/dashboard.html" class="nav-link active">Dashboard</a></li>
+                    <li><a href="/#book" class="nav-link">Book Appointment</a></li>
+                    <li><a href="#" class="nav-link" id="logoutBtn">Logout</a></li>
+                </ul>
+                
+                <button class="mobile-toggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-name" id="userName">Loading...</div>
+                <div class="user-email" id="userEmail">...</div>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="#overview" class="sidebar-link active" data-section="overview">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Overview</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#appointments" class="sidebar-link" data-section="appointments">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>My Appointments</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#medical-records" class="sidebar-link" data-section="medical-records">
+                        <i class="fas fa-file-medical"></i>
+                        <span>Medical Records</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#messages" class="sidebar-link" data-section="messages">
+                        <i class="fas fa-envelope"></i>
+                        <span>Messages</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#payment-history" class="sidebar-link" data-section="payment-history">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Payment History</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#profile" class="sidebar-link" data-section="profile">
+                        <i class="fas fa-user-cog"></i>
+                        <span>My Profile</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#settings" class="sidebar-link" data-section="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Overview Section -->
+            <section id="overview-section" class="dashboard-section">
+                <div class="dashboard-header">
+                    <h1 class="dashboard-title">Welcome back, <span id="welcomeName">Patient</span>!</h1>
+                    <p class="dashboard-subtitle">Here's an overview of your health journey with us.</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3 id="totalAppointments">0</h3>
+                            <p>Total Appointments</p>
+                        </div>
+                        <div class="stat-icon blue">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3 id="upcomingAppointments">0</h3>
+                            <p>Upcoming</p>
+                        </div>
+                        <div class="stat-icon green">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3 id="completedAppointments">0</h3>
+                            <p>Completed</p>
+                        </div>
+                        <div class="stat-icon yellow">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3 id="unreadMessages">0</h3>
+                            <p>Unread Messages</p>
+                        </div>
+                        <div class="stat-icon purple">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Appointments -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2 class="section-title">Upcoming Appointments</h2>
+                        <a href="/booking-calcom.html" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus"></i> Book New
+                        </a>
+                    </div>
+                    <div class="appointments-list" id="upcomingList">
+                        <div class="empty-state">
+                            <i class="fas fa-calendar-times"></i>
+                            <p>No upcoming appointments</p>
+                            <a href="/booking-calcom.html" class="btn btn-primary" style="margin-top: 1rem;">Book an Appointment</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2 class="section-title">Quick Actions</h2>
+                    </div>
+                    <div class="quick-actions">
+                        <a href="/#book" class="action-btn">
+                            <i class="fas fa-calendar-plus"></i>
+                            <span>Book Appointment</span>
+                        </a>
+                        <a href="#medical-records" class="action-btn" data-action="medical-records">
+                            <i class="fas fa-file-download"></i>
+                            <span>View Records</span>
+                        </a>
+                        <a href="#messages" class="action-btn" data-action="messages">
+                            <i class="fas fa-comment-medical"></i>
+                            <span>Send Message</span>
+                        </a>
+                        <a href="#profile" class="action-btn" data-action="profile">
+                            <i class="fas fa-user-edit"></i>
+                            <span>Update Profile</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Appointments Section -->
+            <section id="appointments-section" class="dashboard-section" style="display: none;">
+                <div class="dashboard-header">
+                    <h1 class="dashboard-title">My Appointments</h1>
+                    <p class="dashboard-subtitle">View and manage all your appointments</p>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2 class="section-title">All Appointments</h2>
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <a href="/booking-calcom.html" class="btn btn-primary">
+                                <i class="fas fa-calendar-plus"></i> Book New Appointment
+                            </a>
+                            <select id="appointmentFilter" class="form-select">
+                                <option value="all">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="appointments-list" id="allAppointmentsList">
+                        <div class="empty-state">
+                            <i class="fas fa-calendar"></i>
+                            <p>Loading appointments...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Medical Records Section -->
+            <section id="medical-records-section" class="dashboard-section" style="display: none;">
+                <div class="dashboard-header">
+                    <h1 class="dashboard-title">Medical Records</h1>
+                    <p class="dashboard-subtitle">Access your medical history and test results</p>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2 class="section-title">Your Medical Records</h2>
+                        <button class="btn btn-secondary btn-sm" id="exportRecords">
+                            <i class="fas fa-download"></i> Export All
+                        </button>
+                    </div>
+                    <div id="medicalRecordsList" class="appointments-list">
+                        <div class="empty-state">
+                            <i class="fas fa-file-medical"></i>
+                            <p>Loading medical records...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- File Upload Section -->
+                <div class="section-card" style="margin-top: 2rem;">
+                    <div class="section-header">
+                        <h2 class="section-title">Upload Medical Documents</h2>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <form id="fileUploadForm">
+                            <div class="form-group">
+                                <label>Select Files (PDF, Images, Word docs, Markdown - Max 10MB each)</label>
+                                <input type="file" id="medicalFiles" multiple accept=".pdf,.jpg,.jpeg,.png,.gif,.doc,.docx,.txt,.md,.markdown" class="form-control" style="padding: 0.75rem;">
+                            </div>
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select id="fileCategory" class="form-control">
+                                    <option value="general">General Documents</option>
+                                    <option value="lab-results">Lab Results</option>
+                                    <option value="imaging">Imaging/Scans</option>
+                                    <option value="prescriptions">Prescriptions</option>
+                                    <option value="referrals">Referral Letters</option>
+                                    <option value="insurance">Insurance Documents</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Description (Optional)</label>
+                                <textarea id="fileDescription" rows="2" class="form-control" placeholder="Brief description of the documents"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload"></i> Upload Files
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Uploaded Files List -->
+                <div class="section-card" style="margin-top: 2rem;">
+                    <div class="section-header">
+                        <h2 class="section-title">Your Uploaded Documents</h2>
+                    </div>
+                    <div id="uploadedFilesList" class="appointments-list">
+                        <div class="empty-state">
+                            <i class="fas fa-folder-open"></i>
+                            <p>No documents uploaded yet</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Messages Section -->
+            <section id="messages-section" class="dashboard-section" style="display: none;">
+                <div class="dashboard-header">
+                    <h1 class="dashboard-title">Messages</h1>
+                    <p class="dashboard-subtitle">Communicate with your healthcare team</p>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2 class="section-title">Send New Message</h2>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <form id="messageForm">
+                            <div class="form-group">
+                                <label for="messageSubject">Subject</label>
+                                <input type="text" id="messageSubject" name="subject" required class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="messageContent">Message</label>
+                                <textarea id="messageContent" name="message" rows="4" required class="form-control"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="section-card" style="margin-top: 2rem;">
+                    <div class="section-header">
+                        <h2 class="section-title">Message History</h2>
+                    </div>
+                    <div id="messagesList" class="appointments-list">
+                        <div class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>Loading messages...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Payment History Section -->
+            <section id="payment-history-section" class="dashboard-section" style="display: none;">
+                <div class="dashboard-header">
+                    <h1 class="dashboard-title">Payment History</h1>
+                    <p class="dashboard-subtitle">View your payment transactions and receipts</p>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2 class="section-title">Payment Transactions</h2>
+                        <select id="paymentFilter" class="form-select">
+                            <option value="all">All Payments</option>
+                            <option value="paid">Completed</option>
+                            <option value="pending">Pending</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+                    <div id="paymentHistoryList" class="appointments-list">
+                        <div class="empty-state">
+                            <i class="fas fa-receipt"></i>
+                            <p>Loading payment history...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Summary Stats -->
+                <div class="stats-grid" style="margin-top: 2rem;">
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3 id="totalPayments">£0</h3>
+                            <p>Total Paid</p>
+                        </div>
+                        <div class="stat-icon green">
+                            <i class="fas fa-pound-sign"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3 id="paymentCount">0</h3>
+                            <p>Transactions</p>
+                        </div>
+                        <div class="stat-icon blue">
+                            <i class="fas fa-file-invoice"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3 id="lastPaymentDate">-</h3>
+                            <p>Last Payment</p>
+                        </div>
+                        <div class="stat-icon purple">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile-section" class="dashboard-section" style="display: none;">
+                <div class="dashboard-header">
+                    <h1 class="dashboard-title">My Profile</h1>
+                    <p class="dashboard-subtitle">Manage your personal and medical information</p>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2 class="section-title">Personal Information</h2>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <form id="profileForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>First Name</label>
+                                    <input type="text" name="firstName" class="form-control" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Last Name</label>
+                                    <input type="text" name="lastName" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" name="email" class="form-control" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone</label>
+                                    <input type="tel" name="phone" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" name="address" class="form-control">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>City</label>
+                                    <input type="text" name="city" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Postcode</label>
+                                    <input type="text" name="postcode" class="form-control">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Update Profile
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="section-card" style="margin-top: 2rem;">
+                    <div class="section-header">
+                        <h2 class="section-title">Medical Information</h2>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <form id="medicalForm">
+                            <div class="form-group">
+                                <label>Medical Conditions</label>
+                                <textarea name="medicalConditions" rows="3" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Current Medications</label>
+                                <textarea name="medications" rows="3" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Allergies</label>
+                                <textarea name="allergies" rows="3" class="form-control"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Update Medical Info
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="dashboard-section" style="display: none;">
+                <div class="dashboard-header">
+                    <h1 class="dashboard-title">Settings</h1>
+                    <p class="dashboard-subtitle">Manage your account and privacy settings</p>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2 class="section-title">Change Password</h2>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <form id="passwordForm">
+                            <div class="form-group">
+                                <label>Current Password</label>
+                                <input type="password" name="currentPassword" required class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>New Password</label>
+                                <input type="password" name="newPassword" required minlength="8" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm New Password</label>
+                                <input type="password" name="confirmPassword" required minlength="8" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-key"></i> Change Password
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="section-card" style="margin-top: 2rem;">
+                    <div class="section-header">
+                        <h2 class="section-title">Privacy & Data</h2>
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <div style="margin-bottom: 2rem;">
+                            <h4>Data Export</h4>
+                            <p style="color: #718096; margin-bottom: 1rem;">Download all your personal data in a portable format.</p>
+                            <button class="btn btn-secondary" id="exportData">
+                                <i class="fas fa-download"></i> Export My Data
+                            </button>
+                        </div>
+                        
+                        <div style="border-top: 1px solid #E2E8F0; padding-top: 2rem;">
+                            <h4 style="color: #E53E3E;">Delete Account</h4>
+                            <p style="color: #718096; margin-bottom: 1rem;">Permanently delete your account and all associated data. This action cannot be undone.</p>
+                            <button class="btn btn-danger" id="deleteAccount">
+                                <i class="fas fa-trash"></i> Delete My Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="scripts.js"></script>
+    <script src="cookie-consent.js"></script>
+</body>
+</html>

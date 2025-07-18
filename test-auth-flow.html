@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Auth Flow</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            padding: 20px; 
+            max-width: 800px; 
+            margin: 0 auto;
+        }
+        .section { 
+            border: 1px solid #ccc; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 5px;
+        }
+        button { 
+            padding: 10px 15px; 
+            margin: 5px; 
+            cursor: pointer;
+            background: #2C5282;
+            color: white;
+            border: none;
+            border-radius: 3px;
+        }
+        button:hover { background: #2A4E7C; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Authentication Flow Test</h1>
+    
+    <div class="section">
+        <h2>Current State</h2>
+        <div id="currentState"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Test Actions</h2>
+        <button onclick="testFullFlow()">Test Complete Login → Dashboard Flow</button>
+        <button onclick="testDirectDashboard()">Test Direct Dashboard Access</button>
+        <button onclick="clearAll()">Clear All Auth Data</button>
+        <button onclick="refreshState()">Refresh State</button>
+    </div>
+    
+    <div class="section">
+        <h2>Results</h2>
+        <div id="results"></div>
+    </div>
+    
+    <script src="api.js"></script>
+    <script>
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const timestamp = new Date().toLocaleTimeString();
+            results.innerHTML += `<div class="${type}">[${timestamp}] ${message}</div>`;
+        }
+        
+        function showState() {
+            const state = document.getElementById('currentState');
+            const cookies = document.cookie;
+            const localStorage = {
+                isAuthenticated: window.localStorage.getItem('isAuthenticated'),
+                userId: window.localStorage.getItem('userId'),
+                userEmail: window.localStorage.getItem('userEmail'),
+                userName: window.localStorage.getItem('userName')
+            };
+            
+            state.innerHTML = `
+                <h3>Cookies:</h3>
+                <pre>${cookies || 'No cookies set'}</pre>
+                <h3>LocalStorage:</h3>
+                <pre>${JSON.stringify(localStorage, null, 2)}</pre>
+            `;
+        }
+        
+        async function testFullFlow() {
+            log('Starting full authentication flow test...', 'info');
+            
+            try {
+                // Step 1: Clear everything
+                log('Step 1: Clearing all auth data...', 'info');
+                clearAll();
+                
+                // Step 2: Login
+                log('Step 2: Attempting login...', 'info');
+                const loginResult = await window.risaAPI.login('john.doe@example.com', 'Password123');
+                log('Login successful: ' + JSON.stringify(loginResult.user), 'success');
+                
+                // Step 3: Check localStorage
+                log('Step 3: Checking localStorage...', 'info');
+                showState();
+                
+                // Step 4: Verify API authentication
+                log('Step 4: Verifying API authentication...', 'info');
+                try {
+                    const profile = await window.risaAPI.getProfile();
+                    log('API authentication verified! User: ' + profile.patient.email, 'success');
+                } catch (error) {
+                    log('API authentication failed: ' + error.message, 'error');
+                }
+                
+                // Step 5: Simulate dashboard redirect
+                log('Step 5: Dashboard would redirect to /dashboard.html', 'info');
+                log('In real flow, dashboard.js would call getProfile() to verify auth', 'info');
+                
+            } catch (error) {
+                log('Flow failed: ' + error.message, 'error');
+            }
+        }
+        
+        async function testDirectDashboard() {
+            log('Testing direct dashboard access...', 'info');
+            
+            try {
+                const profile = await window.risaAPI.getProfile();
+                log('Dashboard access would succeed! User: ' + profile.patient.email, 'success');
+                log('Dashboard would load normally', 'success');
+            } catch (error) {
+                log('Dashboard access would fail: ' + error.message, 'error');
+                log('Dashboard would redirect to /patient-portal.html', 'info');
+            }
+        }
+        
+        function clearAll() {
+            // Clear cookies
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+            
+            // Clear localStorage
+            localStorage.clear();
+            
+            log('Cleared all authentication data', 'info');
+            showState();
+        }
+        
+        function refreshState() {
+            showState();
+            log('State refreshed', 'info');
+        }
+        
+        // Initial state
+        showState();
+    </script>
+</body>
+</html>

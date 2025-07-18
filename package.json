@@ -1,0 +1,46 @@
+{
+  "name": "risa-medical",
+  "version": "1.0.0",
+  "description": "Risa Medical - Private GP Services Website",
+  "main": "index.html",
+  "scripts": {
+    "start": "node proxy-server.js",
+    "start:static": "npx http-server . -p 8080",
+    "build": "echo 'Static site - no build process needed'",
+    "deploy": "netlify deploy --prod --dir .",
+    "dev": "node proxy-server.js",
+    "dev:old": "npx http-server . -p 3000 -o",
+    "test": "echo 'No tests specified'",
+    "lint": "echo 'No linting configured'"
+  },
+  "keywords": [
+    "medical",
+    "private-gp",
+    "healthcare",
+    "ballyclare",
+    "northern-ireland",
+    "womens-health",
+    "weight-management",
+    "alternative-medicine"
+  ],
+  "author": "Dr. Leanne Sheridan <consultations@risamedical.co.uk>",
+  "license": "ISC",
+  "homepage": "https://risamedical.co.uk",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/risamedical/website.git"
+  },
+  "devDependencies": {
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6",
+    "http-server": "^14.1.1",
+    "netlify-cli": "^17.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "multer": "^2.0.1"
+  }
+}

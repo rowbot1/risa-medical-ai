@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Risa Medical</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .admin-dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: calc(100vh - 70px);
+            background-color: #F7FAFC;
+        }
+        
+        /* Reuse sidebar styles from patient dashboard */
+        .sidebar {
+            background-color: white;
+            border-right: 1px solid #E2E8F0;
+            padding: 2rem 0;
+        }
+        
+        .admin-info {
+            text-align: center;
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid #E2E8F0;
+            margin-bottom: 2rem;
+        }
+        
+        .admin-avatar {
+            width: 80px;
+            height: 80px;
+            background-color: #805AD5;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+        }
+        
+        .admin-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #2D3748;
+            margin-bottom: 0.25rem;
+        }
+        
+        .admin-role {
+            font-size: 0.875rem;
+            color: #805AD5;
+            font-weight: 500;
+        }
+        
+        /* Main Content */
+        .admin-main {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-title {
+            color: #718096;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 0.375rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #1A202C;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-change {
+            font-size: 0.875rem;
+            color: #48BB78;
+        }
+        
+        .stat-change.negative {
+            color: #E53E3E;
+        }
+        
+        /* Calendar View */
+        .calendar-section {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .calendar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #E2E8F0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .calendar-nav {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background-color: #E2E8F0;
+            padding: 1px;
+        }
+        
+        .calendar-day {
+            background: white;
+            padding: 0.5rem;
+            min-height: 100px;
+            position: relative;
+        }
+        
+        .calendar-day-header {
+            font-weight: 600;
+            color: #718096;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .calendar-day-number {
+            font-size: 0.875rem;
+            color: #4A5568;
+            margin-bottom: 0.5rem;
+        }
+        
+        .calendar-day.today {
+            background-color: #F0F8FF;
+        }
+        
+        .calendar-day.today .calendar-day-number {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .appointment-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 2px;
+        }
+        
+        /* Appointments Table */
+        .appointments-table {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #E2E8F0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            text-align: left;
+            padding: 1rem 1.5rem;
+            background-color: #F7FAFC;
+            font-weight: 600;
+            color: #4A5568;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        td {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #E2E8F0;
+        }
+        
+        tr:hover {
+            background-color: #F7FAFC;
+        }
+        
+        /* Session Management */
+        .session-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .time-slots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .time-slot {
+            padding: 0.5rem;
+            text-align: center;
+            border: 2px solid #E2E8F0;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .time-slot:hover {
+            border-color: var(--primary-color);
+            background-color: #F0F8FF;
+        }
+        
+        .time-slot.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .time-slot.unavailable {
+            background-color: #F7FAFC;
+            color: #CBD5E0;
+            cursor: not-allowed;
+        }
+        
+        /* Patient List */
+        .patient-card {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: white;
+            border: 1px solid #E2E8F0;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .patient-card:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .patient-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #E2E8F0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-weight: 600;
+            color: #4A5568;
+        }
+        
+        .patient-info {
+            flex: 1;
+        }
+        
+        .patient-name {
+            font-weight: 600;
+            color: #2D3748;
+            margin-bottom: 0.25rem;
+        }
+        
+        .patient-details {
+            font-size: 0.875rem;
+            color: #718096;
+        }
+        
+        .patient-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .admin-dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .admin-main {
+                padding: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .calendar-grid {
+                display: none;
+            }
+            
+            .appointments-table {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>Risa Medical - Admin</span>
+                </a>
+                
+                <ul class="nav-menu">
+                    <li><a href="/admin-dashboard.html" class="nav-link active">Dashboard</a></li>
+                    <li><a href="/" class="nav-link" target="_blank">View Site</a></li>
+                    <li><a href="#" class="nav-link" id="adminLogoutBtn">Logout</a></li>
+                </ul>
+                
+                <button class="mobile-toggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="admin-dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="admin-info">
+                <div class="admin-avatar">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div class="admin-name">Dr. Leanne Sheridan</div>
+                <div class="admin-role">Administrator</div>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="#dashboard" class="sidebar-link active" data-section="dashboard">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#appointments" class="sidebar-link" data-section="appointments">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Appointments</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#schedule" class="sidebar-link" data-section="schedule">
+                        <i class="fas fa-clock"></i>
+                        <span>My Schedule</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#patients" class="sidebar-link" data-section="patients">
+                        <i class="fas fa-users"></i>
+                        <span>Patients</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#messages" class="sidebar-link" data-section="messages">
+                        <i class="fas fa-envelope"></i>
+                        <span>Messages</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#reports" class="sidebar-link" data-section="reports">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/dermatology-analysis.html" class="sidebar-link" onclick="window.location.href='/dermatology-analysis.html'; return false;">
+                        <i class="fas fa-microscope"></i>
+                        <span>Skin Analysis AI</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="admin-section">
+                <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">Admin Dashboard</h1>
+                <p style="color: #718096; margin-bottom: 2rem;">Welcome back, Dr. Sheridan</p>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Today's Appointments</span>
+                            <div class="stat-icon" style="background-color: #EBF8FF; color: #2B6CB0;">
+                                <i class="fas fa-calendar-day"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="todayCount">0</div>
+                        <div class="stat-change">+2 from yesterday</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Total Patients</span>
+                            <div class="stat-icon" style="background-color: #F0FFF4; color: #38A169;">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="patientCount">0</div>
+                        <div class="stat-change">+12 this month</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">This Week</span>
+                            <div class="stat-icon" style="background-color: #FFFFF0; color: #D69E2E;">
+                                <i class="fas fa-calendar-week"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="weekCount">0</div>
+                        <div class="stat-change">85% booked</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Unread Messages</span>
+                            <div class="stat-icon" style="background-color: #FAF5FF; color: #805AD5;">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="messageCount">0</div>
+                        <div class="stat-change negative">Requires attention</div>
+                    </div>
+                </div>
+
+                <!-- Today's Schedule -->
+                <div class="appointments-table">
+                    <div class="table-header">
+                        <h2 style="margin: 0;">Today's Schedule</h2>
+                        <span id="todayDate" style="color: #718096;"></span>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Patient</th>
+                                <th>Service</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="todaySchedule">
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: #718096;">
+                                    Loading today's appointments...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Appointments Section -->
+            <section id="appointments-section" class="admin-section" style="display: none;">
+                <h1 style="font-size: 2rem; margin-bottom: 2rem;">All Appointments</h1>
+                
+                <div class="appointments-table">
+                    <div class="table-header">
+                        <h2 style="margin: 0;">Appointment Management</h2>
+                        <div style="display: flex; gap: 1rem;">
+                            <input type="date" id="appointmentDateFilter" class="form-control" style="width: auto;">
+                            <select id="appointmentStatusFilter" class="form-select">
+                                <option value="">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                                <option value="no-show">No Show</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Patient</th>
+                                <th>Service</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allAppointments">
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: #718096;">
+                                    Loading appointments...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Schedule Management Section -->
+            <section id="schedule-section" class="admin-section" style="display: none;">
+                <h1 style="font-size: 2rem; margin-bottom: 2rem;">Schedule Management</h1>
+                
+                <div class="session-form">
+                    <h2 style="margin-bottom: 1.5rem;">Create New Session</h2>
+                    <form id="sessionForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Session Date</label>
+                                <input type="date" name="sessionDate" required class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Session Type</label>
+                                <select name="sessionType" class="form-control">
+                                    <option value="general">General Consultation</option>
+                                    <option value="specialist">Specialist Consultation</option>
+                                    <option value="followup">Follow-up</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Start Time</label>
+                                <input type="time" name="startTime" required class="form-control" value="09:00">
+                            </div>
+                            <div class="form-group">
+                                <label>End Time</label>
+                                <input type="time" name="endTime" required class="form-control" value="17:00">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Slot Duration (minutes)</label>
+                            <select name="slotDuration" class="form-control">
+                                <option value="15">15 minutes</option>
+                                <option value="30" selected>30 minutes</option>
+                                <option value="45">45 minutes</option>
+                                <option value="60">60 minutes</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Create Session
+                        </button>
+                    </form>
+                </div>
+
+                <div class="calendar-section">
+                    <div class="calendar-header">
+                        <h2 style="margin: 0;">Weekly Schedule</h2>
+                        <div class="calendar-nav">
+                            <button class="btn btn-secondary btn-sm" id="prevWeek">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <span id="currentWeek">This Week</span>
+                            <button class="btn btn-secondary btn-sm" id="nextWeek">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="weeklySchedule" style="padding: 1.5rem;">
+                        Loading schedule...
+                    </div>
+                </div>
+            </section>
+
+            <!-- Patients Section -->
+            <section id="patients-section" class="admin-section" style="display: none;">
+                <h1 style="font-size: 2rem; margin-bottom: 2rem;">Patient Management</h1>
+                
+                <div style="background: white; padding: 1.5rem; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); margin-bottom: 2rem;">
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <input type="text" id="patientSearch" placeholder="Search patients by name, email, phone, or medical entity..." class="form-control" style="flex: 1;">
+                        <select id="entityTypeFilter" class="form-control" style="width: 200px;">
+                            <option value="">All Entity Types</option>
+                            <option value="condition">Conditions</option>
+                            <option value="medication">Medications</option>
+                            <option value="anatomy">Anatomy</option>
+                            <option value="oncology">Oncology</option>
+                        </select>
+                        <button id="toggleSearchMode" class="btn btn-secondary" style="white-space: nowrap;">
+                            <i class="fas fa-exchange-alt"></i> Entity Search
+                        </button>
+                    </div>
+                    <div id="entitySearchInfo" style="margin-top: 0.5rem; font-size: 0.875rem; color: #718096; display: none;">
+                        <i class="fas fa-info-circle"></i> Entity search mode: Find patients by medical conditions, medications, or anatomical terms
+                    </div>
+                </div>
+                
+                <div id="patientsList">
+                    Loading patients...
+                </div>
+            </section>
+
+            <!-- Messages Section -->
+            <section id="messages-section" class="admin-section" style="display: none;">
+                <h1 style="font-size: 2rem; margin-bottom: 2rem;">Patient Messages</h1>
+                
+                <div id="adminMessagesList">
+                    Loading messages...
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reports-section" class="admin-section" style="display: none;">
+                <h1 style="font-size: 2rem; margin-bottom: 2rem;">Reports & Analytics</h1>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Monthly Overview</h3>
+                        <canvas id="monthlyChart" width="300" height="200"></canvas>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <h3>Service Distribution</h3>
+                        <canvas id="serviceChart" width="300" height="200"></canvas>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 1.5rem; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); margin-top: 2rem;">
+                    <h3>Export Reports</h3>
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <button class="btn btn-secondary" onclick="exportReport('appointments')">
+                            <i class="fas fa-download"></i> Export Appointments
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportReport('patients')">
+                            <i class="fas fa-download"></i> Export Patient List
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportAuditLog()">
+                            <i class="fas fa-download"></i> Export Audit Log
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 1.5rem; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); margin-top: 2rem;">
+                    <h3>Medical Entity Statistics</h3>
+                    <p style="color: #718096; margin-bottom: 1rem;">Most common medical entities extracted from patient records</p>
+                    <div id="entityStatistics" style="display: grid; gap: 1rem;">
+                        <div style="text-align: center; padding: 2rem; color: #718096;">
+                            <i class="fas fa-spinner fa-spin"></i> Loading entity statistics...
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Medical Record Modal -->
+    <div id="medicalRecordModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
+            <div class="modal-header">
+                <h2>Add Medical Record</h2>
+                <span class="close" onclick="closeMedicalRecordModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="medicalRecordForm">
+                    <input type="hidden" id="recordPatientId" />
+                    
+                    <div class="form-group">
+                        <label>Patient</label>
+                        <input type="text" id="recordPatientName" class="form-control" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Record Type</label>
+                        <select id="recordType" class="form-control" required>
+                            <option value="">Select type...</option>
+                            <option value="Consultation">Consultation</option>
+                            <option value="Lab Results">Lab Results</option>
+                            <option value="Imaging">Imaging/Scan Results</option>
+                            <option value="Prescription">Prescription</option>
+                            <option value="Referral">Referral Letter</option>
+                            <option value="Discharge Summary">Discharge Summary</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="recordTitle" class="form-control" required placeholder="e.g., Annual Check-up, Blood Test Results">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Content</label>
+                        <div style="margin-bottom: 0.5rem;">
+                            <button type="button" class="btn btn-sm btn-secondary" onclick="document.getElementById('markdownFileInput').click()">
+                                <i class="fas fa-file-upload"></i> Upload Markdown File
+                            </button>
+                            <input type="file" id="markdownFileInput" accept=".md,.markdown,.txt" style="display: none;" onchange="loadMarkdownFile(this)">
+                            <span id="uploadedFileName" style="margin-left: 1rem; color: #718096;"></span>
+                        </div>
+                        <textarea id="recordContent" class="form-control" rows="10" required placeholder="Enter medical record content or upload a markdown file..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" id="analyzeImmediately" checked>
+                            Analyze with AI immediately
+                            <small style="color: #718096;">(Extract medical entities)</small>
+                        </label>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeMedicalRecordModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Record
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 0;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+        
+        .close {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #718096;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        .close:hover {
+            color: #2d3748;
+        }
+        
+        .btn-success {
+            background-color: #48bb78;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #38a169;
+        }
+    </style>
+
+    <script src="api.js"></script>
+    <script src="admin-dashboard.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>

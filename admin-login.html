@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Risa Medical</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .admin-login-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .login-header {
+            background-color: #805AD5;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .login-header h1 {
+            margin: 0 0 0.5rem;
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+        
+        .login-header p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        .admin-icon {
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            color: #805AD5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .login-form {
+            padding: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #4A5568;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #E2E8F0;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #805AD5;
+            box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.1);
+        }
+        
+        .password-input {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #718096;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+        
+        .toggle-password:hover {
+            color: #4A5568;
+        }
+        
+        .btn-admin-login {
+            width: 100%;
+            padding: 1rem;
+            background-color: #805AD5;
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-admin-login:hover {
+            background-color: #6B46C1;
+            transform: translateY(-1px);
+        }
+        
+        .btn-admin-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .error-message {
+            background-color: #FED7D7;
+            color: #742A2A;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        .security-notice {
+            background-color: #F7FAFC;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin-top: 1.5rem;
+            font-size: 0.875rem;
+            color: #4A5568;
+            text-align: center;
+        }
+        
+        .security-notice i {
+            color: #805AD5;
+            margin-right: 0.5rem;
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        
+        .back-link a {
+            color: #805AD5;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+        
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <section class="admin-login-section">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="admin-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h1>Admin Portal</h1>
+                <p>Risa Medical Staff Access</p>
+            </div>
+            
+            <div class="login-form">
+                <div class="error-message" id="errorMessage">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="errorText">Invalid credentials</span>
+                </div>
+                
+                <form id="adminLoginForm">
+                    <div class="form-group">
+                        <label for="email">Admin Email</label>
+                        <input type="email" id="email" name="email" required placeholder="admin@risamedical.co.uk">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="password-input">
+                            <input type="password" id="password" name="password" required placeholder="Enter your password">
+                            <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-admin-login">
+                        <i class="fas fa-lock"></i> Secure Login
+                    </button>
+                </form>
+                
+                <div class="security-notice">
+                    <i class="fas fa-shield-alt"></i>
+                    This is a secure area for authorized personnel only. All access attempts are logged.
+                </div>
+                
+                <div class="back-link">
+                    <a href="/"><i class="fas fa-arrow-left"></i> Back to Main Site</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="api.js"></script>
+    <script>
+        // Debug: Check if API is loaded
+        console.log('Admin page - API script loaded, checking window.risaAPI:', window.risaAPI);
+        
+        // Password visibility toggle
+        const togglePassword = document.querySelector('.toggle-password');
+        const passwordInput = document.getElementById('password');
+        
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePassword.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+        
+        // Admin login form handling
+        const adminLoginForm = document.getElementById('adminLoginForm');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        adminLoginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Hide error message
+            errorMessage.style.display = 'none';
+            
+            const formData = new FormData(adminLoginForm);
+            const email = formData.get('email');
+            const password = formData.get('password');
+            
+            // Disable submit button
+            const submitBtn = adminLoginForm.querySelector('.btn-admin-login');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
+            
+            try {
+                if (!window.risaAPI) {
+                    throw new Error('API not loaded. Please refresh the page.');
+                }
+                
+                const result = await window.risaAPI.adminLogin(email, password);
+                console.log('Admin login result:', result);
+                
+                // Store admin info
+                localStorage.setItem('adminEmail', result.user.email);
+                localStorage.setItem('adminName', result.user.name);
+                localStorage.setItem('adminRole', result.user.role);
+                
+                // Store authentication token if provided
+                if (result.token) {
+                    localStorage.setItem('authToken', result.token);
+                    console.log('Token stored:', result.token.substring(0, 20) + '...');
+                } else {
+                    console.log('No token in response');
+                }
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('userType', 'admin');
+                
+                console.log('LocalStorage after login:', {
+                    isAuthenticated: localStorage.getItem('isAuthenticated'),
+                    userType: localStorage.getItem('userType'),
+                    authToken: localStorage.getItem('authToken') ? 'Present' : 'Missing'
+                });
+                
+                // Wait a moment then redirect
+                setTimeout(() => {
+                    console.log('Redirecting to dashboard...');
+                    window.location.href = '/admin-dashboard.html';
+                }, 1000);
+                
+            } catch (error) {
+                // Show error message
+                document.getElementById('errorText').textContent = error.message || 'Invalid admin credentials';
+                errorMessage.style.display = 'block';
+                
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-lock"></i> Secure Login';
+            }
+        });
+    </script>
+</body>
+</html>

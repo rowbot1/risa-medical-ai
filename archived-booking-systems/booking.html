@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Consultation - Risa Medical</title>
+    <meta name="description" content="Book your private GP consultation with Dr. Leanne Sheridan. Professional healthcare with secure online payment.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stripe -->
+    <script src="https://js.stripe.com/v3/"></script>
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="booking-styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-wrapper">
+                    <a href="/" class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <div class="logo-text">
+                            <span class="logo-name">Risa Medical</span>
+                            <span class="logo-tagline">Private Healthcare Excellence</span>
+                        </div>
+                    </a>
+                    
+                    <nav class="nav-menu">
+                        <a href="/" class="nav-link">Home</a>
+                        <a href="/#services" class="nav-link">Services</a>
+                        <a href="/#contact" class="nav-link">Contact</a>
+                        <a href="/patient-portal.html" class="nav-link">Patient Portal</a>
+                    </nav>
+                    
+                    <button class="mobile-toggle" aria-label="Toggle menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Booking Section -->
+    <section class="booking-container">
+        <div class="container">
+            <!-- Progress Bar -->
+            <div class="booking-progress">
+                <div class="progress-steps">
+                    <div class="progress-step active" data-step="1">
+                        <div class="step-circle">1</div>
+                        <div class="step-label">Service</div>
+                    </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-step" data-step="2">
+                        <div class="step-circle">2</div>
+                        <div class="step-label">Date & Time</div>
+                    </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-step" data-step="3">
+                        <div class="step-circle">3</div>
+                        <div class="step-label">Details</div>
+                    </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-step" data-step="4">
+                        <div class="step-circle">4</div>
+                        <div class="step-label">Payment</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="booking-content">
+                <!-- Step 1: Service Selection -->
+                <div class="booking-step active" id="step-1">
+                    <h2>Select Your Service</h2>
+                    <p class="step-description">Choose the type of consultation that best suits your needs</p>
+                    
+                    <div class="service-cards" id="serviceCards">
+                        <!-- Services will be populated by JavaScript -->
+                    </div>
+                    
+                    <div class="step-navigation">
+                        <button class="btn btn-secondary" onclick="window.location.href='/'">
+                            <i class="fas fa-arrow-left"></i> Back to Home
+                        </button>
+                        <button class="btn btn-primary" onclick="nextStep()" disabled id="step1Next">
+                            Continue <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Date & Time Selection -->
+                <div class="booking-step" id="step-2">
+                    <h2>Choose Date & Time</h2>
+                    <p class="step-description">Select your preferred appointment date and time</p>
+                    
+                    <div class="datetime-selection">
+                        <div class="calendar-section">
+                            <h3>Select Date</h3>
+                            <div class="calendar-container">
+                                <div class="calendar-header">
+                                    <button class="calendar-nav" onclick="changeMonth(-1)">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <span id="currentMonth"></span>
+                                    <button class="calendar-nav" onclick="changeMonth(1)">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                                <div class="calendar-days" id="calendarDays"></div>
+                                <div class="calendar-dates" id="calendarDates"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="time-section">
+                            <h3>Available Times</h3>
+                            <div class="time-slots" id="timeSlots">
+                                <p class="time-placeholder">Please select a date first</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-navigation">
+                        <button class="btn btn-secondary" onclick="previousStep()">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button class="btn btn-primary" onclick="nextStep()" disabled id="step2Next">
+                            Continue <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Personal Details -->
+                <div class="booking-step" id="step-3">
+                    <h2>Your Details</h2>
+                    <p class="step-description">Please provide your contact information</p>
+                    
+                    <form id="detailsForm" class="booking-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="dateOfBirth">Date of Birth *</label>
+                                <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender">Gender</label>
+                                <select id="gender" name="gender">
+                                    <option value="">Prefer not to say</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="medicalConcerns">What would you like to discuss? *</label>
+                            <textarea id="medicalConcerns" name="medicalConcerns" rows="4" required 
+                                      placeholder="Please briefly describe your health concerns or what you'd like to discuss during your consultation"></textarea>
+                        </div>
+                        
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" name="newPatient" id="newPatient">
+                                I am a new patient
+                            </label>
+                        </div>
+                        
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" name="consent" id="consent" required>
+                                I consent to the processing of my personal data for healthcare purposes *
+                            </label>
+                        </div>
+                        
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" name="marketing" id="marketing">
+                                I would like to receive health tips and updates from Risa Medical
+                            </label>
+                        </div>
+                    </form>
+                    
+                    <div class="step-navigation">
+                        <button class="btn btn-secondary" onclick="previousStep()">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button class="btn btn-primary" onclick="proceedToPayment()" id="step3Next">
+                            Continue to Payment <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Payment -->
+                <div class="booking-step" id="step-4">
+                    <h2>Complete Your Booking</h2>
+                    <p class="step-description">Review your booking and complete payment</p>
+                    
+                    <div class="booking-summary">
+                        <h3>Booking Summary</h3>
+                        <div class="summary-content" id="bookingSummary">
+                            <!-- Summary will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="payment-section">
+                        <h3>Payment Details</h3>
+                        <div class="payment-methods">
+                            <span>Accepted cards:</span>
+                            <i class="fab fa-cc-visa"></i>
+                            <i class="fab fa-cc-mastercard"></i>
+                            <i class="fab fa-cc-amex"></i>
+                        </div>
+                        <div style="position: relative;">
+                            <div id="card-element" class="card-element">
+                                <!-- Stripe card element will be mounted here -->
+                            </div>
+                            <div class="payment-processing" id="paymentProcessing">
+                                <div class="payment-processing-content">
+                                    <i class="fas fa-spinner"></i>
+                                    <p>Processing payment...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="card-errors" class="card-errors" role="alert"></div>
+                    </div>
+                    
+                    <div class="security-note">
+                        <i class="fas fa-lock"></i>
+                        <span>Your payment information is secure and encrypted</span>
+                    </div>
+                    
+                    <div class="test-card-info">
+                        <p><strong>Test Card:</strong> 4242 4242 4242 4242</p>
+                        <p>Use any future date and any 3-digit CVC</p>
+                    </div>
+                    
+                    <div class="step-navigation">
+                        <button class="btn btn-secondary" onclick="previousStep()">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
+                        <button class="btn btn-primary" onclick="completeBooking()" id="completeBookingBtn">
+                            <span class="btn-text">Complete Booking</span>
+                            <span class="btn-loading" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i> Processing...
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Success Message -->
+                <div class="booking-step" id="step-success">
+                    <div class="success-message">
+                        <i class="fas fa-check-circle"></i>
+                        <h2>Booking Confirmed!</h2>
+                        <p>Thank you for booking your consultation with Dr. Sheridan.</p>
+                        <div class="confirmation-details" id="confirmationDetails">
+                            <!-- Confirmation details will be populated by JavaScript -->
+                        </div>
+                        <div class="success-actions">
+                            <button class="btn btn-primary" onclick="window.location.href='/patient-portal.html'">
+                                Go to Patient Portal
+                            </button>
+                            <button class="btn btn-secondary" onclick="window.location.href='/'">
+                                Return to Home
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>Risa Medical</span>
+                    </div>
+                    <p>Private healthcare excellence with Dr. Leanne Sheridan</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/#about">About Dr. Sheridan</a></li>
+                            <li><a href="/#services">Our Services</a></li>
+                            <li><a href="/#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Risa Medical. All rights reserved.</p>
+                <div class="footer-legal">
+                    <a href="/privacy-policy.html">Privacy Policy</a>
+                    <a href="/terms.html">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="api.js"></script>
+    <script src="booking-script.js"></script>
+</body>
+</html>

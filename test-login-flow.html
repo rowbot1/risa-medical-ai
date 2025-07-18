@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Login Flow</title>
+    <style>
+        body { font-family: Arial; padding: 20px; max-width: 600px; margin: 0 auto; }
+        .step { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        .success { color: green; }
+        .error { color: red; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Patient Portal Login Test</h1>
+    
+    <div class="step">
+        <h3>Step 1: Clear Everything</h3>
+        <button onclick="clearAll()">Clear All Auth Data</button>
+        <div id="clearResult"></div>
+    </div>
+    
+    <div class="step">
+        <h3>Step 2: Login</h3>
+        <button onclick="doLogin()">Login as John Doe</button>
+        <div id="loginResult"></div>
+    </div>
+    
+    <div class="step">
+        <h3>Step 3: Check Authentication</h3>
+        <button onclick="checkAuth()">Check Auth Status</button>
+        <div id="authResult"></div>
+    </div>
+    
+    <div class="step">
+        <h3>Step 4: Go to Dashboard</h3>
+        <button onclick="goToDashboard()">Go to Dashboard</button>
+        <p>This simulates what happens when you click login and get redirected</p>
+    </div>
+    
+    <script src="api.js"></script>
+    <script>
+        async function clearAll() {
+            // Clear cookies
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+            
+            // Clear localStorage
+            localStorage.clear();
+            
+            document.getElementById('clearResult').innerHTML = '<p class="success">✓ All authentication data cleared</p>';
+        }
+        
+        async function doLogin() {
+            const resultDiv = document.getElementById('loginResult');
+            resultDiv.innerHTML = '<p>Logging in...</p>';
+            
+            try {
+                const result = await window.risaAPI.login('john.doe@example.com', 'Password123');
+                
+                resultDiv.innerHTML = `
+                    <p class="success">✓ Login successful!</p>
+                    <p>User: ${result.user.firstName} ${result.user.lastName}</p>
+                    <p>Email: ${result.user.email}</p>
+                    <h4>LocalStorage after login:</h4>
+                    <pre>${JSON.stringify({
+                        isAuthenticated: localStorage.getItem('isAuthenticated'),
+                        userId: localStorage.getItem('userId'),
+                        userEmail: localStorage.getItem('userEmail'),
+                        userName: localStorage.getItem('userName')
+                    }, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">✗ Login failed: ${error.message}</p>`;
+            }
+        }
+        
+        async function checkAuth() {
+            const resultDiv = document.getElementById('authResult');
+            resultDiv.innerHTML = '<p>Checking authentication...</p>';
+            
+            try {
+                // This is what dashboard.js does
+                const profile = await window.risaAPI.getProfile();
+                
+                resultDiv.innerHTML = `
+                    <p class="success">✓ Authentication verified via API!</p>
+                    <p>User: ${profile.patient.first_name} ${profile.patient.last_name}</p>
+                    <p>Email: ${profile.patient.email}</p>
+                    <p>This means the dashboard will load successfully!</p>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <p class="error">✗ Authentication check failed: ${error.message}</p>
+                    <p>This means the dashboard would redirect to login page</p>
+                `;
+            }
+        }
+        
+        function goToDashboard() {
+            window.location.href = '/dashboard.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Analysis - Risa Medical AI</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .dermatology-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .upload-section {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .image-upload-area {
+            border: 3px dashed #CBD5E0;
+            border-radius: 1rem;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            background: #F7FAFC;
+        }
+        
+        .image-upload-area:hover {
+            border-color: var(--primary-color);
+            background: #EBF8FF;
+        }
+        
+        .image-upload-area.has-image {
+            border-style: solid;
+            padding: 1rem;
+        }
+        
+        .preview-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .remove-image {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #E53E3E;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .context-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .analysis-results {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .diagnosis-card {
+            background: #F0F8FF;
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+        
+        .diagnosis-primary {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2D3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .confidence-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .confidence-high {
+            background: #C6F6D5;
+            color: #22543D;
+        }
+        
+        .confidence-moderate {
+            background: #FEEBC8;
+            color: #744210;
+        }
+        
+        .confidence-low {
+            background: #FED7D7;
+            color: #742A2A;
+        }
+        
+        .differential-list {
+            background: #F7FAFC;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .differential-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        
+        .differential-item:last-child {
+            border-bottom: none;
+        }
+        
+        .red-flag {
+            background: #FED7D7;
+            border-left: 4px solid #E53E3E;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+        
+        .recommendations {
+            background: #F0FFF4;
+            border-left: 4px solid #38A169;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0.5rem;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .history-item {
+            border: 1px solid #E2E8F0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .history-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .history-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 0.375rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>Risa Medical - AI Dermatology</span>
+                </a>
+                
+                <ul class="nav-menu">
+                    <li><a href="/admin-dashboard.html" class="nav-link">Dashboard</a></li>
+                    <li><a href="#" class="nav-link" id="logoutBtn">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="dermatology-container">
+        <h1 style="text-align: center; margin-bottom: 2rem;">
+            <i class="fas fa-microscope"></i> AI-Powered Skin Analysis
+        </h1>
+
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <h2>Upload Skin Image for Analysis</h2>
+            <p style="color: #718096; margin-bottom: 1.5rem;">
+                Take a clear, well-lit photo of the skin condition. The AI will analyze and provide diagnostic insights.
+            </p>
+
+            <div class="image-upload-area" id="uploadArea">
+                <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                <div class="upload-prompt">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #CBD5E0; margin-bottom: 1rem;"></i>
+                    <p style="font-size: 1.125rem; font-weight: 500; color: #4A5568;">
+                        Click to upload, drag and drop, or paste image
+                    </p>
+                    <p style="color: #718096; font-size: 0.875rem;">
+                        JPEG, PNG or WebP (max 20MB)
+                    </p>
+                    <p style="color: #4A90E2; font-size: 0.875rem; margin-top: 0.5rem;">
+                        <i class="fas fa-paste"></i> Press Ctrl+V (or Cmd+V) to paste from clipboard
+                    </p>
+                </div>
+                <div class="preview-container" style="display: none;">
+                    <img id="previewImage" class="preview-image" alt="Skin image preview">
+                    <button class="remove-image" onclick="removeImage()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Context Form -->
+            <form id="contextForm" class="context-form">
+                <div class="form-group">
+                    <label>Body Location</label>
+                    <select name="bodyLocation" class="form-control">
+                        <option value="">Select location...</option>
+                        <option value="face">Face</option>
+                        <option value="neck">Neck</option>
+                        <option value="chest">Chest</option>
+                        <option value="back">Back</option>
+                        <option value="arm">Arm</option>
+                        <option value="hand">Hand</option>
+                        <option value="leg">Leg</option>
+                        <option value="foot">Foot</option>
+                        <option value="scalp">Scalp</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Duration</label>
+                    <select name="duration" class="form-control">
+                        <option value="">Select duration...</option>
+                        <option value="< 1 week">Less than 1 week</option>
+                        <option value="1-4 weeks">1-4 weeks</option>
+                        <option value="1-3 months">1-3 months</option>
+                        <option value="3-6 months">3-6 months</option>
+                        <option value="6-12 months">6-12 months</option>
+                        <option value="> 1 year">More than 1 year</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Patient Age</label>
+                    <input type="number" name="patientAge" class="form-control" placeholder="Age in years">
+                </div>
+
+                <div class="form-group">
+                    <label>Skin Type (Fitzpatrick)</label>
+                    <select name="skinType" class="form-control">
+                        <option value="">Select skin type...</option>
+                        <option value="I">Type I - Very fair</option>
+                        <option value="II">Type II - Fair</option>
+                        <option value="III">Type III - Medium</option>
+                        <option value="IV">Type IV - Olive</option>
+                        <option value="V">Type V - Brown</option>
+                        <option value="VI">Type VI - Dark brown/Black</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Symptoms</label>
+                    <input type="text" name="symptoms" class="form-control" 
+                           placeholder="e.g., itchy, painful, bleeding, growing">
+                </div>
+
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Additional Information</label>
+                    <textarea name="additionalInfo" class="form-control" rows="3" 
+                              placeholder="Previous treatments, medical history, triggers, etc."></textarea>
+                </div>
+            </form>
+
+            <button id="analyzeBtn" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;" disabled>
+                <i class="fas fa-search"></i> Analyze Skin Condition
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner"></div>
+            <p style="color: #718096;">Analyzing image with AI models...</p>
+            <p style="color: #A0AEC0; font-size: 0.875rem;">This may take 10-30 seconds</p>
+        </div>
+
+        <!-- Analysis Results -->
+        <div class="analysis-results" id="analysisResults">
+            <h2 style="margin-bottom: 1.5rem;">
+                <i class="fas fa-clipboard-list"></i> Analysis Results
+            </h2>
+            <div id="resultsContent"></div>
+        </div>
+
+        <!-- Previous Analyses -->
+        <div class="upload-section" style="margin-top: 2rem;">
+            <h2>Previous Analyses</h2>
+            <div class="history-grid" id="analysisHistory">
+                <p style="color: #718096;">Loading history...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        let selectedFile = null;
+
+        // Setup upload area
+        const uploadArea = document.getElementById('uploadArea');
+        const imageInput = document.getElementById('imageInput');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+
+        uploadArea.addEventListener('click', () => imageInput.click());
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'var(--primary-color)';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#CBD5E0';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#CBD5E0';
+            
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                handleImageSelect(file);
+            }
+        });
+
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                handleImageSelect(file);
+            }
+        });
+
+        // Handle paste from clipboard
+        document.addEventListener('paste', async (e) => {
+            e.preventDefault();
+            
+            const items = e.clipboardData.items;
+            
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                
+                if (item.type.indexOf('image') !== -1) {
+                    const blob = item.getAsFile();
+                    
+                    // Create a File object from the blob
+                    const file = new File([blob], 'pasted-image.png', {
+                        type: blob.type,
+                        lastModified: Date.now()
+                    });
+                    
+                    handleImageSelect(file);
+                    
+                    // Visual feedback
+                    uploadArea.style.borderColor = '#48BB78';
+                    uploadArea.style.backgroundColor = '#F0FFF4';
+                    
+                    setTimeout(() => {
+                        uploadArea.style.borderColor = '#CBD5E0';
+                        uploadArea.style.backgroundColor = '#F7FAFC';
+                    }, 500);
+                    
+                    break;
+                }
+            }
+        });
+
+        // Visual feedback when focusing on the page
+        uploadArea.addEventListener('click', () => {
+            uploadArea.focus();
+        });
+
+        // Add tabindex to make the area focusable
+        uploadArea.setAttribute('tabindex', '0');
+
+        function handleImageSelect(file) {
+            selectedFile = file;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('previewImage').src = e.target.result;
+                document.querySelector('.upload-prompt').style.display = 'none';
+                document.querySelector('.preview-container').style.display = 'block';
+                uploadArea.classList.add('has-image');
+                analyzeBtn.disabled = false;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeImage() {
+            selectedFile = null;
+            document.querySelector('.upload-prompt').style.display = 'block';
+            document.querySelector('.preview-container').style.display = 'none';
+            uploadArea.classList.remove('has-image');
+            analyzeBtn.disabled = true;
+            imageInput.value = '';
+        }
+
+        // Analyze button
+        analyzeBtn.addEventListener('click', async () => {
+            if (!selectedFile) return;
+
+            const formData = new FormData();
+            formData.append('image', selectedFile);
+            
+            // Add context data
+            const contextForm = document.getElementById('contextForm');
+            const contextData = new FormData(contextForm);
+            for (let [key, value] of contextData.entries()) {
+                if (value) formData.append(key, value);
+            }
+
+            // Show loading
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('analysisResults').style.display = 'none';
+            analyzeBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/dermatology/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    },
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayResults(result.results);
+                } else {
+                    alert('Analysis failed: ' + (result.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Analysis error:', error);
+                alert('Error analyzing image: ' + error.message);
+            } finally {
+                document.getElementById('loadingSpinner').style.display = 'none';
+                analyzeBtn.disabled = false;
+            }
+        });
+
+        function displayResults(results) {
+            const resultsContent = document.getElementById('resultsContent');
+            let html = '';
+
+            results.analyses.forEach(analysis => {
+                if (analysis.type === 'comprehensive') {
+                    html += `
+                        <div class="diagnosis-card">
+                            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">
+                                <i class="fas fa-stethoscope"></i> ${analysis.model}
+                            </h3>
+                            <div class="diagnosis-primary">
+                                ${analysis.diagnosis || 'See detailed analysis'}
+                            </div>
+                            <span class="confidence-badge confidence-${getConfidenceLevel(analysis.confidence)}">
+                                Confidence: ${analysis.confidence || 'Moderate'}
+                            </span>
+                        </div>
+                    `;
+
+                    if (analysis.redFlags && analysis.redFlags.length > 0) {
+                        html += `
+                            <div class="red-flag">
+                                <h4><i class="fas fa-exclamation-triangle"></i> Red Flags</h4>
+                                ${analysis.redFlags.map(flag => `<p>${flag}</p>`).join('')}
+                            </div>
+                        `;
+                    }
+
+                    if (analysis.differentials && analysis.differentials.length > 0) {
+                        html += `
+                            <div class="differential-list">
+                                <h4>Differential Diagnoses</h4>
+                                ${analysis.differentials.map(diff => 
+                                    `<div class="differential-item">${diff}</div>`
+                                ).join('')}
+                            </div>
+                        `;
+                    }
+
+                    if (analysis.recommendations && analysis.recommendations.length > 0) {
+                        html += `
+                            <div class="recommendations">
+                                <h4><i class="fas fa-clipboard-check"></i> Recommendations</h4>
+                                ${analysis.recommendations.map(rec => `<p>${rec}</p>`).join('')}
+                            </div>
+                        `;
+                    }
+
+                    if (analysis.fullAnalysis) {
+                        html += `
+                            <details style="margin-top: 1rem;">
+                                <summary style="cursor: pointer; color: var(--primary-color);">
+                                    View Full Analysis
+                                </summary>
+                                <pre style="white-space: pre-wrap; margin-top: 1rem; padding: 1rem; background: #F7FAFC; border-radius: 0.5rem;">
+${analysis.fullAnalysis}
+                                </pre>
+                            </details>
+                        `;
+                    }
+                }
+
+                if (analysis.type === 'cancer_screening' && analysis.screening === 'completed') {
+                    html += `
+                        <div class="diagnosis-card" style="margin-top: 2rem;">
+                            <h3 style="color: #E53E3E; margin-bottom: 1rem;">
+                                <i class="fas fa-shield-alt"></i> Cancer Screening
+                            </h3>
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                <strong>Risk Level:</strong>
+                                <span class="confidence-badge confidence-${analysis.riskLevel.toLowerCase()}">
+                                    ${analysis.riskLevel}
+                                </span>
+                            </div>
+                            ${analysis.topFindings ? `
+                                <div style="margin: 1rem 0;">
+                                    <strong>Findings:</strong>
+                                    ${analysis.topFindings.map(f => 
+                                        `<div style="margin: 0.5rem 0;">
+                                            ${f.label}: ${f.confidence}
+                                        </div>`
+                                    ).join('')}
+                                </div>
+                            ` : ''}
+                            <div class="recommendations" style="margin-top: 1rem;">
+                                <p>${analysis.recommendation}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            resultsContent.innerHTML = html;
+            document.getElementById('analysisResults').style.display = 'block';
+            
+            // Scroll to results
+            document.getElementById('analysisResults').scrollIntoView({ behavior: 'smooth' });
+            
+            // Reload history
+            loadAnalysisHistory();
+        }
+
+        function getConfidenceLevel(confidence) {
+            if (!confidence) return 'moderate';
+            const conf = confidence.toLowerCase();
+            if (conf.includes('high')) return 'high';
+            if (conf.includes('low')) return 'low';
+            return 'moderate';
+        }
+
+        // Load analysis history
+        async function loadAnalysisHistory() {
+            try {
+                const response = await fetch('/api/dermatology/history', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && result.analyses.length > 0) {
+                    const historyHtml = result.analyses.map(analysis => `
+                        <div class="history-item" onclick="viewAnalysis(${analysis.id})">
+                            <img src="${analysis.image_path}" class="history-image" alt="Previous analysis">
+                            <div style="font-size: 0.875rem;">
+                                <strong>${analysis.primary_diagnosis || 'Analysis'}</strong>
+                                <p style="color: #718096; margin: 0.25rem 0;">
+                                    ${new Date(analysis.created_at).toLocaleDateString()}
+                                </p>
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    document.getElementById('analysisHistory').innerHTML = historyHtml;
+                } else {
+                    document.getElementById('analysisHistory').innerHTML = 
+                        '<p style="color: #718096;">No previous analyses found</p>';
+                }
+            } catch (error) {
+                console.error('Error loading history:', error);
+            }
+        }
+
+        function viewAnalysis(id) {
+            // TODO: Implement viewing previous analysis
+            console.log('View analysis:', id);
+        }
+
+        // Check auth
+        if (!localStorage.getItem('authToken')) {
+            window.location.href = '/admin-login.html';
+        }
+
+        // Load history on page load
+        loadAnalysisHistory();
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            await window.risaAPI.logout();
+            window.location.href = '/';
+        });
+    </script>
+</body>
+</html>

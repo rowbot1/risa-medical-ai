@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1000" width="1400" height="1000">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2C5282;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2D3748;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#48bb78;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#38a169;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Shadows -->
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="2" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1400" height="1000" fill="#f7fafc"/>
+  
+  <!-- Title -->
+  <text x="700" y="40" font-family="Arial, sans-serif" font-size="32" font-weight="bold" text-anchor="middle" fill="#2D3748">
+    Risa Medical System Architecture
+  </text>
+  
+  <!-- Client Layer -->
+  <g id="client-layer">
+    <rect x="50" y="80" width="1300" height="200" rx="10" fill="#EDF2F7" stroke="#CBD5E0" stroke-width="2"/>
+    <text x="700" y="110" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Client Layer
+    </text>
+    
+    <!-- Public Website -->
+    <rect x="100" y="130" width="200" height="120" rx="8" fill="white" filter="url(#shadow)"/>
+    <text x="200" y="160" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Public Website
+    </text>
+    <text x="200" y="185" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • Landing Page
+    </text>
+    <text x="200" y="200" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • Services Info
+    </text>
+    <text x="200" y="215" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • Contact Form
+    </text>
+    <text x="200" y="230" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • Cal.com Booking
+    </text>
+    
+    <!-- Patient Portal -->
+    <rect x="350" y="130" width="200" height="120" rx="8" fill="white" filter="url(#shadow)"/>
+    <text x="450" y="160" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Patient Portal
+    </text>
+    <text x="450" y="185" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • Dashboard
+    </text>
+    <text x="450" y="200" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • Appointments
+    </text>
+    <text x="450" y="215" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • Medical Records
+    </text>
+    <text x="450" y="230" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • File Upload
+    </text>
+    
+    <!-- Admin Dashboard -->
+    <rect x="600" y="130" width="200" height="120" rx="8" fill="white" filter="url(#shadow)"/>
+    <text x="700" y="160" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Admin Dashboard
+    </text>
+    <text x="700" y="185" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • Patient Management
+    </text>
+    <text x="700" y="200" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • Schedule View
+    </text>
+    <text x="700" y="215" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • Reports
+    </text>
+    <text x="700" y="230" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • Messages
+    </text>
+    
+    <!-- Third Party Integrations -->
+    <rect x="850" y="130" width="200" height="120" rx="8" fill="white" filter="url(#shadow)"/>
+    <text x="950" y="160" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Integrations
+    </text>
+    <text x="950" y="185" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • Cal.com Booking
+    </text>
+    <text x="950" y="200" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • Stripe Payments
+    </text>
+    <text x="950" y="215" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • Email (SMTP)
+    </text>
+    <text x="950" y="230" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • SMS (Future)
+    </text>
+    
+    <!-- Mobile Responsive -->
+    <rect x="1100" y="130" width="200" height="120" rx="8" fill="white" filter="url(#shadow)"/>
+    <text x="1200" y="160" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Mobile Access
+    </text>
+    <text x="1200" y="185" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • Responsive Design
+    </text>
+    <text x="1200" y="200" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • Touch Optimized
+    </text>
+    <text x="1200" y="215" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#718096">
+      • PWA Ready
+    </text>
+  </g>
+  
+  <!-- API Gateway -->
+  <g id="api-gateway">
+    <rect x="50" y="320" width="1300" height="120" rx="10" fill="url(#blueGradient)" filter="url(#shadow)"/>
+    <text x="700" y="355" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="white">
+      API Gateway (Express.js)
+    </text>
+    
+    <!-- Security Features -->
+    <rect x="100" y="370" width="150" height="50" rx="5" fill="white" opacity="0.9"/>
+    <text x="175" y="390" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Security
+    </text>
+    <text x="175" y="407" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4A5568">
+      JWT • Rate Limiting
+    </text>
+    
+    <!-- Middleware -->
+    <rect x="300" y="370" width="150" height="50" rx="5" fill="white" opacity="0.9"/>
+    <text x="375" y="390" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Middleware
+    </text>
+    <text x="375" y="407" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4A5568">
+      Auth • Validation
+    </text>
+    
+    <!-- Routes -->
+    <rect x="500" y="370" width="400" height="50" rx="5" fill="white" opacity="0.9"/>
+    <text x="700" y="390" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      API Routes
+    </text>
+    <text x="700" y="407" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4A5568">
+      /auth • /appointments • /patients • /admin • /payments • /medical-files
+    </text>
+    
+    <!-- CORS -->
+    <rect x="950" y="370" width="150" height="50" rx="5" fill="white" opacity="0.9"/>
+    <text x="1025" y="390" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      CORS
+    </text>
+    <text x="1025" y="407" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4A5568">
+      Configured Origins
+    </text>
+    
+    <!-- File Upload -->
+    <rect x="1150" y="370" width="150" height="50" rx="5" fill="white" opacity="0.9"/>
+    <text x="1225" y="390" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      File Upload
+    </text>
+    <text x="1225" y="407" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#4A5568">
+      Multer • 10MB Limit
+    </text>
+  </g>
+  
+  <!-- Business Logic Layer -->
+  <g id="business-logic">
+    <rect x="50" y="480" width="1300" height="200" rx="10" fill="#E6FFFA" stroke="#4FD1C5" stroke-width="2"/>
+    <text x="700" y="510" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Business Logic & Services
+    </text>
+    
+    <!-- Authentication Service -->
+    <rect x="100" y="530" width="180" height="120" rx="8" fill="white" filter="url(#shadow)"/>
+    <text x="190" y="560" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Authentication
+    </text>
+    <text x="190" y="580" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • JWT Tokens
+    </text>
+    <text x="190" y="595" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Password Reset
+    </text>
+    <text x="190" y="610" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Session Management
+    </text>
+    <text x="190" y="625" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • 2FA (Future)
+    </text>
+    
+    <!-- Appointment Service -->
+    <rect x="320" y="530" width="180" height="120" rx="8" fill="white" filter="url(#shadow)"/>
+    <text x="410" y="560" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Appointments
+    </text>
+    <text x="410" y="580" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Booking Logic
+    </text>
+    <text x="410" y="595" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Rescheduling
+    </text>
+    <text x="410" y="610" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Cancellations
+    </text>
+    <text x="410" y="625" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Availability Check
+    </text>
+    
+    <!-- Payment Service -->
+    <rect x="540" y="530" width="180" height="120" rx="8" fill="white" filter="url(#shadow)"/>
+    <text x="630" y="560" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Payments
+    </text>
+    <text x="630" y="580" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Stripe Integration
+    </text>
+    <text x="630" y="595" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Webhooks
+    </text>
+    <text x="630" y="610" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Invoicing
+    </text>
+    <text x="630" y="625" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Refunds
+    </text>
+    
+    <!-- Medical Records -->
+    <rect x="760" y="530" width="180" height="120" rx="8" fill="white" filter="url(#shadow)"/>
+    <text x="850" y="560" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Medical Records
+    </text>
+    <text x="850" y="580" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • File Management
+    </text>
+    <text x="850" y="595" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Document Upload
+    </text>
+    <text x="850" y="610" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Access Control
+    </text>
+    <text x="850" y="625" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Audit Trail
+    </text>
+    
+    <!-- Email Service -->
+    <rect x="980" y="530" width="180" height="120" rx="8" fill="white" filter="url(#shadow)"/>
+    <text x="1070" y="560" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Communications
+    </text>
+    <text x="1070" y="580" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Email Notifications
+    </text>
+    <text x="1070" y="595" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Appointment Reminders
+    </text>
+    <text x="1070" y="610" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Secure Messaging
+    </text>
+    <text x="1070" y="625" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • SMS (Future)
+    </text>
+    
+    <!-- Reporting -->
+    <rect x="1200" y="530" width="110" height="120" rx="8" fill="white" filter="url(#shadow)"/>
+    <text x="1255" y="560" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Analytics
+    </text>
+    <text x="1255" y="580" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Reports
+    </text>
+    <text x="1255" y="595" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Metrics
+    </text>
+    <text x="1255" y="610" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      • Audit Logs
+    </text>
+  </g>
+  
+  <!-- Data Layer -->
+  <g id="data-layer">
+    <rect x="50" y="720" width="1300" height="200" rx="10" fill="#FEF5E7" stroke="#F6AD55" stroke-width="2"/>
+    <text x="700" y="750" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Data Layer
+    </text>
+    
+    <!-- SQLite Database -->
+    <rect x="100" y="780" width="300" height="120" rx="8" fill="white" filter="url(#shadow)"/>
+    <text x="250" y="810" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      SQLite Database
+    </text>
+    <text x="150" y="835" font-family="Arial, sans-serif" font-size="11" text-anchor="start" fill="#718096">
+      Tables:
+    </text>
+    <text x="160" y="850" font-family="Arial, sans-serif" font-size="10" text-anchor="start" fill="#718096">
+      • patients • appointments
+    </text>
+    <text x="160" y="865" font-family="Arial, sans-serif" font-size="10" text-anchor="start" fill="#718096">
+      • admin_users • medical_records
+    </text>
+    <text x="160" y="880" font-family="Arial, sans-serif" font-size="10" text-anchor="start" fill="#718096">
+      • messages • audit_logs • medical_files
+    </text>
+    
+    <!-- File Storage -->
+    <rect x="450" y="780" width="250" height="120" rx="8" fill="white" filter="url(#shadow)"/>
+    <text x="575" y="810" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      File Storage
+    </text>
+    <text x="575" y="835" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      /uploads/medical-files/
+    </text>
+    <text x="575" y="855" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#718096">
+      • Patient Documents
+    </text>
+    <text x="575" y="870" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#718096">
+      • Lab Results
+    </text>
+    <text x="575" y="885" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#718096">
+      • Imaging Files
+    </text>
+    
+    <!-- Backup Storage -->
+    <rect x="750" y="780" width="200" height="120" rx="8" fill="white" filter="url(#shadow)"/>
+    <text x="850" y="810" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Backups
+    </text>
+    <text x="850" y="835" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      Daily Automated
+    </text>
+    <text x="850" y="855" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#718096">
+      • Database Dumps
+    </text>
+    <text x="850" y="870" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#718096">
+      • File Archives
+    </text>
+    <text x="850" y="885" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#718096">
+      • 30 Day Retention
+    </text>
+    
+    <!-- Cache/Session -->
+    <rect x="1000" y="780" width="200" height="120" rx="8" fill="white" filter="url(#shadow)"/>
+    <text x="1100" y="810" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#2D3748">
+      Session Store
+    </text>
+    <text x="1100" y="835" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="#718096">
+      In-Memory + Cookies
+    </text>
+    <text x="1100" y="855" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#718096">
+      • JWT Tokens
+    </text>
+    <text x="1100" y="870" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#718096">
+      • User Sessions
+    </text>
+    <text x="1100" y="885" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="#718096">
+      • 24hr Expiry
+    </text>
+  </g>
+  
+  <!-- Arrows showing data flow -->
+  <!-- Client to API -->
+  <path d="M 200 250 L 200 320" stroke="#4A5568" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M 450 250 L 450 320" stroke="#4A5568" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M 700 250 L 700 320" stroke="#4A5568" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M 950 250 L 950 320" stroke="#4A5568" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- API to Services -->
+  <path d="M 190 440 L 190 530" stroke="#4A5568" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M 410 440 L 410 530" stroke="#4A5568" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M 630 440 L 630 530" stroke="#4A5568" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M 850 440 L 850 530" stroke="#4A5568" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M 1070 440 L 1070 530" stroke="#4A5568" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Services to Data -->
+  <path d="M 250 650 L 250 780" stroke="#4A5568" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M 575 650 L 575 780" stroke="#4A5568" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M 850 650 L 850 780" stroke="#4A5568" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <path d="M 1100 650 L 1100 780" stroke="#4A5568" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4A5568" />
+    </marker>
+  </defs>
+  
+  <!-- Security Badge -->
+  <g transform="translate(1200, 920)">
+    <circle cx="0" cy="0" r="40" fill="url(#greenGradient)" filter="url(#shadow)"/>
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white" dy="-5">
+      HIPAA
+    </text>
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="white" dy="10">
+      GDPR
+    </text>
+  </g>
+  
+  <!-- Technology Stack -->
+  <g transform="translate(100, 950)">
+    <text font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2D3748">
+      Tech Stack:
+    </text>
+    <text x="80" font-family="Arial, sans-serif" font-size="12" fill="#4A5568">
+      Node.js • Express.js • SQLite • JWT • Stripe • Cal.com • Multer • Nodemailer • Docker • Nginx
+    </text>
+  </g>
+</svg>

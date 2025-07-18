@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Admin Auth</title>
+    <style>
+        body { font-family: Arial; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .test { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; background: #805AD5; color: white; border: none; border-radius: 3px; }
+        button:hover { background: #6B46C1; }
+        .success { color: green; }
+        .error { color: red; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>Admin Authentication Test</h1>
+    
+    <div class="test">
+        <h3>1. Admin Login Test</h3>
+        <button onclick="testAdminLogin()">Test Admin Login</button>
+        <div id="loginResult"></div>
+    </div>
+    
+    <div class="test">
+        <h3>2. Auth Check Test</h3>
+        <button onclick="testAuthCheck()">Test Auth Check</button>
+        <div id="authResult"></div>
+    </div>
+    
+    <div class="test">
+        <h3>3. Dashboard Access Test</h3>
+        <button onclick="testDashboard()">Go to Dashboard</button>
+        <div id="dashboardResult"></div>
+    </div>
+    
+    <div class="test">
+        <h3>Current State</h3>
+        <button onclick="showState()">Refresh State</button>
+        <div id="stateDisplay"></div>
+    </div>
+    
+    <script src="api.js"></script>
+    <script>
+        async function testAdminLogin() {
+            const resultDiv = document.getElementById('loginResult');
+            resultDiv.innerHTML = '<p>Testing admin login...</p>';
+            
+            try {
+                const result = await window.risaAPI.adminLogin('admin@risamedical.com', 'admin123');
+                
+                // Store admin info like the real login page does
+                localStorage.setItem('adminEmail', result.user.email);
+                localStorage.setItem('adminName', result.user.name);
+                localStorage.setItem('adminRole', result.user.role);
+                
+                if (result.token) {
+                    localStorage.setItem('authToken', result.token);
+                }
+                localStorage.setItem('isAuthenticated', 'true');
+                localStorage.setItem('userType', 'admin');
+                
+                resultDiv.innerHTML = `
+                    <p class="success">✓ Admin login successful!</p>
+                    <p>User: ${result.user.name}</p>
+                    <p>Email: ${result.user.email}</p>
+                    <p>Token stored: ${result.token ? 'Yes' : 'No'}</p>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">✗ Admin login failed: ${error.message}</p>`;
+            }
+            
+            showState();
+        }
+        
+        async function testAuthCheck() {
+            const resultDiv = document.getElementById('authResult');
+            resultDiv.innerHTML = '<p>Testing auth check...</p>';
+            
+            try {
+                const result = await window.risaAPI.request('/auth/check');
+                
+                resultDiv.innerHTML = `
+                    <p class="success">✓ Auth check successful!</p>
+                    <p>User Type: ${result.userType}</p>
+                    <p>User: ${result.user.name}</p>
+                    <p>This means the dashboard will work!</p>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">✗ Auth check failed: ${error.message}</p>`;
+            }
+        }
+        
+        function testDashboard() {
+            window.location.href = '/admin-dashboard.html';
+        }
+        
+        function showState() {
+            const state = {
+                localStorage: {
+                    isAuthenticated: localStorage.getItem('isAuthenticated'),
+                    userType: localStorage.getItem('userType'),
+                    authToken: localStorage.getItem('authToken') ? 'Token present' : 'No token',
+                    adminEmail: localStorage.getItem('adminEmail'),
+                    adminName: localStorage.getItem('adminName')
+                }
+            };
+            
+            document.getElementById('stateDisplay').innerHTML = `
+                <h4>Current Authentication State:</h4>
+                <pre>${JSON.stringify(state, null, 2)}</pre>
+            `;
+        }
+        
+        // Show initial state
+        showState();
+    </script>
+</body>
+</html>

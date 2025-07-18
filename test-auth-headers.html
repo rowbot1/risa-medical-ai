@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Auth with Headers</title>
+    <style>
+        body { font-family: Arial; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .test { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; background: #2C5282; color: white; border: none; border-radius: 3px; }
+        button:hover { background: #2A4E7C; }
+        .success { color: green; }
+        .error { color: red; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; border-radius: 3px; }
+        .info { color: #666; font-style: italic; }
+    </style>
+</head>
+<body>
+    <h1>Authentication Test - Cookie + Header Fallback</h1>
+    
+    <div class="test">
+        <h3>1. Clear Everything & Login</h3>
+        <button onclick="testFullFlow()">Run Complete Test</button>
+        <div id="flowResult"></div>
+    </div>
+    
+    <div class="test">
+        <h3>2. Manual Steps</h3>
+        <button onclick="clearAll()">Clear All</button>
+        <button onclick="doLogin()">Login</button>
+        <button onclick="testAPI()">Test API Call</button>
+        <button onclick="testDashboard()">Test Dashboard Access</button>
+        <div id="manualResult"></div>
+    </div>
+    
+    <div class="test">
+        <h3>Current State</h3>
+        <button onclick="showState()">Refresh State</button>
+        <div id="stateDisplay"></div>
+    </div>
+    
+    <script src="api.js"></script>
+    <script>
+        function log(elementId, message, type = '') {
+            const element = document.getElementById(elementId);
+            const className = type ? ` class="${type}"` : '';
+            element.innerHTML += `<div${className}>${message}</div>`;
+        }
+        
+        function clearLog(elementId) {
+            document.getElementById(elementId).innerHTML = '';
+        }
+        
+        async function clearAll() {
+            // Clear cookies
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+            
+            // Clear localStorage
+            localStorage.clear();
+            
+            log('manualResult', '✓ Cleared all authentication data', 'success');
+            showState();
+        }
+        
+        async function doLogin() {
+            clearLog('manualResult');
+            log('manualResult', 'Attempting login...');
+            
+            try {
+                const result = await window.risaAPI.login('john.doe@example.com', 'Password123');
+                log('manualResult', '✓ Login successful!', 'success');
+                log('manualResult', `User: ${result.user.firstName} ${result.user.lastName}`);
+                log('manualResult', `Token stored: ${result.token ? 'Yes' : 'No'}`);
+                showState();
+            } catch (error) {
+                log('manualResult', `✗ Login failed: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testAPI() {
+            clearLog('manualResult');
+            log('manualResult', 'Testing API call to /api/patients/profile...');
+            
+            try {
+                const profile = await window.risaAPI.getProfile();
+                log('manualResult', '✓ API call successful!', 'success');
+                log('manualResult', `Authenticated as: ${profile.patient.first_name} ${profile.patient.last_name}`);
+                log('manualResult', 'This means the dashboard will work!', 'info');
+            } catch (error) {
+                log('manualResult', `✗ API call failed: ${error.message}`, 'error');
+                log('manualResult', 'Dashboard would redirect to login', 'info');
+            }
+        }
+        
+        async function testDashboard() {
+            window.location.href = '/dashboard.html';
+        }
+        
+        async function testFullFlow() {
+            clearLog('flowResult');
+            
+            // Step 1: Clear
+            log('flowResult', '<strong>Step 1: Clearing all auth data...</strong>');
+            await clearAll();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Step 2: Login
+            log('flowResult', '<strong>Step 2: Logging in...</strong>');
+            try {
+                const loginResult = await window.risaAPI.login('john.doe@example.com', 'Password123');
+                log('flowResult', '✓ Login successful', 'success');
+                log('flowResult', `Token received: ${loginResult.token ? 'Yes' : 'No'}`);
+                log('flowResult', `Token stored in localStorage: ${localStorage.getItem('authToken') ? 'Yes' : 'No'}`);
+            } catch (error) {
+                log('flowResult', `✗ Login failed: ${error.message}`, 'error');
+                return;
+            }
+            
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Step 3: Test API
+            log('flowResult', '<strong>Step 3: Testing authenticated API call...</strong>');
+            try {
+                const profile = await window.risaAPI.getProfile();
+                log('flowResult', '✓ API authentication working!', 'success');
+                log('flowResult', `User verified: ${profile.patient.email}`);
+                log('flowResult', '<strong>✓ Dashboard should now work correctly!</strong>', 'success');
+            } catch (error) {
+                log('flowResult', `✗ API authentication failed: ${error.message}`, 'error');
+            }
+            
+            showState();
+        }
+        
+        function showState() {
+            const state = {
+                cookies: document.cookie || 'None',
+                localStorage: {
+                    isAuthenticated: localStorage.getItem('isAuthenticated'),
+                    authToken: localStorage.getItem('authToken') ? 'Token present' : 'No token',
+                    userId: localStorage.getItem('userId'),
+                    userEmail: localStorage.getItem('userEmail')
+                }
+            };
+            
+            document.getElementById('stateDisplay').innerHTML = `
+                <h4>Current Authentication State:</h4>
+                <pre>${JSON.stringify(state, null, 2)}</pre>
+            `;
+        }
+        
+        // Show initial state
+        showState();
+    </script>
+</body>
+</html>

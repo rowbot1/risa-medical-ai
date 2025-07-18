@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Login</title>
+</head>
+<body>
+    <h1>Test Patient Login</h1>
+    <p>Test credentials:</p>
+    <ul>
+        <li>Email: john.doe@example.com</li>
+        <li>Password: Password123</li>
+    </ul>
+    
+    <button id="testLogin">Test Login</button>
+    <div id="result"></div>
+    
+    <script src="api.js"></script>
+    <script>
+        document.getElementById('testLogin').addEventListener('click', async () => {
+            const resultDiv = document.getElementById('result');
+            try {
+                console.log('Starting login test...');
+                
+                const result = await window.risaAPI.login('john.doe@example.com', 'Password123');
+                console.log('Login result:', result);
+                
+                resultDiv.innerHTML = `
+                    <p style="color: green;">✓ Login successful!</p>
+                    <p>User: ${result.user.firstName} ${result.user.lastName}</p>
+                    <p>Token cookie should be set.</p>
+                    <p><a href="/dashboard.html">Go to Dashboard</a></p>
+                `;
+                
+                // Try redirect
+                setTimeout(() => {
+                    console.log('Redirecting to dashboard...');
+                    window.location.href = '/dashboard.html';
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                resultDiv.innerHTML = `<p style="color: red;">✗ Login failed: ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

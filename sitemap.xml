@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <!-- Homepage -->
+    <url>
+        <loc>https://www.risamedical.co.uk/</loc>
+        <lastmod>2024-01-15</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    
+    <!-- Patient Portal -->
+    <url>
+        <loc>https://www.risamedical.co.uk/patient-portal.html</loc>
+        <lastmod>2024-01-15</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Privacy Policy -->
+    <url>
+        <loc>https://www.risamedical.co.uk/privacy-policy.html</loc>
+        <lastmod>2024-01-15</lastmod>
+        <changefreq>quarterly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    
+    <!-- Terms of Service -->
+    <url>
+        <loc>https://www.risamedical.co.uk/terms.html</loc>
+        <lastmod>2024-01-15</lastmod>
+        <changefreq>quarterly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    
+    <!-- Medical Disclaimer -->
+    <url>
+        <loc>https://www.risamedical.co.uk/disclaimer.html</loc>
+        <lastmod>2024-01-15</lastmod>
+        <changefreq>quarterly</changefreq>
+        <priority>0.5</priority>
+    </url>
+</urlset>

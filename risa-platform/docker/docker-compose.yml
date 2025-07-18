@@ -1,0 +1,148 @@
+version: '3.8'
+
+services:
+  # Twenty CRM Database
+  twenty-db:
+    image: twentycrm/twenty-postgres-spilo:latest
+    environment:
+      PGUSER_SUPERUSER: twenty
+      PGPASSWORD_SUPERUSER: twenty
+      ALLOW_NOSSL: true
+      POSTGRES_DB: twenty
+    volumes:
+      - twenty_db_data:/home/postgres/pgdata
+    ports:
+      - "5432:5432"
+    networks:
+      - risa-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U twenty -d twenty"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Twenty CRM Redis
+  twenty-redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - risa-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Twenty CRM Server
+  twenty-server:
+    image: twentycrm/twenty:latest
+    environment:
+      NODE_ENV: development
+      SERVER_URL: http://localhost:3000
+      FRONT_BASE_URL: http://localhost:3001
+      
+      # Database
+      PG_DATABASE_URL: postgres://twenty:twenty@twenty-db:5432/twenty
+      
+      # Redis
+      REDIS_URL: redis://twenty-redis:6379
+      CACHE_STORAGE_TYPE: redis
+      MESSAGE_QUEUE_TYPE: bull-mq
+      
+      # Auth
+      ACCESS_TOKEN_SECRET: risa-medical-access-secret-2025
+      LOGIN_TOKEN_SECRET: risa-medical-login-secret-2025
+      REFRESH_TOKEN_SECRET: risa-medical-refresh-secret-2025
+      FILE_TOKEN_SECRET: risa-medical-file-secret-2025
+      
+      # Email (using same config as Risa Medical)
+      EMAIL_FROM_ADDRESS: noreply@risamedical.co.uk
+      EMAIL_FROM_NAME: Risa Medical CRM
+      EMAIL_SMTP_HOST: smtp.gmail.com
+      EMAIL_SMTP_PORT: 587
+      EMAIL_SMTP_USER: ${SMTP_USER}
+      EMAIL_SMTP_PASSWORD: ${SMTP_PASSWORD}
+      
+      # Storage
+      STORAGE_TYPE: local
+      STORAGE_LOCAL_PATH: /app/files
+      
+      # Integration with Risa Medical
+      RISA_MEDICAL_API_URL: http://host.docker.internal:5001
+      RISA_MEDICAL_API_KEY: ${RISA_API_KEY}
+      
+      # Feature flags
+      IS_BILLING_ENABLED: false
+      IS_SIGN_UP_DISABLED: false
+      IS_WORKFLOW_ENABLED: true
+      IS_MESSAGING_ENABLED: true
+    volumes:
+      - twenty_files:/app/files
+    ports:
+      - "3000:3000"
+    depends_on:
+      twenty-db:
+        condition: service_healthy
+      twenty-redis:
+        condition: service_healthy
+    networks:
+      - risa-network
+
+  # Twenty CRM Frontend
+  twenty-frontend:
+    image: twentycrm/twenty-front:latest
+    environment:
+      REACT_APP_SERVER_BASE_URL: http://localhost:3000
+    ports:
+      - "3002:3000"
+    depends_on:
+      - twenty-server
+    networks:
+      - risa-network
+
+  # Integration Service
+  risa-integration:
+    build:
+      context: ../twenty-integration
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: development
+      PORT: 4000
+      
+      # Risa Medical Connection
+      RISA_API_URL: http://host.docker.internal:5001
+      RISA_DB_PATH: ../../server/database/risa_medical.db
+      
+      # Twenty CRM Connection
+      TWENTY_API_URL: http://twenty-server:3000
+      TWENTY_API_KEY: ${TWENTY_API_KEY}
+      
+      # Sync Configuration
+      SYNC_INTERVAL_MINUTES: 5
+      ENABLE_REALTIME_SYNC: true
+      
+      # Security
+      INTEGRATION_SECRET: risa-twenty-integration-secret-2025
+      
+      # Webhooks
+      WEBHOOK_SECRET: risa-webhook-secret-2025
+    volumes:
+      - ../twenty-integration:/app
+      - ../../server/database:/databases
+    ports:
+      - "4000:4000"
+    depends_on:
+      - twenty-server
+    networks:
+      - risa-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  risa-network:
+    driver: bridge
+
+volumes:
+  twenty_db_data:
+  twenty_files:
