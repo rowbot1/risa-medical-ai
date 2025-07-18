@@ -100,42 +100,48 @@ router.post('/analyze',
                 try {
                     await fs.unlink(req.file.path);
                 } catch (unlinkError) {
-                    console.error('Error deleting file:', unlinkError);
+                    console.error('Error deleting uploaded file:', unlinkError);
                 }
             }
             
-            res.status(500).json({
-                error: 'Failed to analyze skin image',
-                message: error.message
+            res.status(500).json({ 
+                error: 'Analysis failed', 
+                message: error.message || 'Unknown error' 
             });
         }
     }
 );
 
-// Get analysis history
-router.get('/history',
+// Get patient's analysis history
+router.get('/history/:patientId?',
     verifyToken,
     async (req, res) => {
         try {
-            const patientId = req.user.role === 'admin' && req.query.patientId ? 
-                            req.query.patientId : req.user.id;
+            const patientId = req.params.patientId || req.user.id;
             
+            // Check permissions
+            if (req.params.patientId && req.user.role !== 'admin' && req.user.id !== parseInt(patientId)) {
+                return res.status(403).json({ error: 'Access denied' });
+            }
+
             const analyses = await dermatologyService.getPatientAnalyses(patientId);
             
             res.json({
                 success: true,
                 analyses: analyses
             });
+
         } catch (error) {
             console.error('Error fetching analysis history:', error);
-            res.status(500).json({
-                error: 'Failed to fetch analysis history'
+            res.status(500).json({ 
+                error: 'Failed to fetch history', 
+                message: error.message 
             });
         }
     }
 );
 
-// Get specific analysis
+// Get specific analysis details
 router.get('/analysis/:id',
     verifyToken,
     async (req, res) => {
@@ -144,57 +150,29 @@ router.get('/analysis/:id',
                 `SELECT * FROM dermatology_analyses WHERE id = ?`,
                 [req.params.id]
             );
-            
+
             if (!analysis) {
                 return res.status(404).json({ error: 'Analysis not found' });
             }
-            
-            // Check access permissions
-            if (req.user.role !== 'admin' && analysis.patient_id !== req.user.id) {
+
+            // Check permissions
+            if (req.user.role !== 'admin' && req.user.id !== analysis.patient_id) {
                 return res.status(403).json({ error: 'Access denied' });
             }
-            
-            analysis.analysis_results = JSON.parse(analysis.analysis_results);
-            
+
             res.json({
                 success: true,
-                analysis: analysis
+                analysis: {
+                    ...analysis,
+                    analysis_results: JSON.parse(analysis.analysis_results)
+                }
             });
+
         } catch (error) {
             console.error('Error fetching analysis:', error);
-            res.status(500).json({
-                error: 'Failed to fetch analysis'
-            });
-        }
-    }
-);
-
-// Add follow-up notes (admin only)
-router.post('/analysis/:id/notes',
-    verifyToken,
-    async (req, res) => {
-        try {
-            if (req.user.role !== 'admin') {
-                return res.status(403).json({ error: 'Admin access required' });
-            }
-            
-            const { notes, followUpRequired } = req.body;
-            
-            await dbAsync.run(
-                `UPDATE dermatology_analyses 
-                 SET notes = ?, follow_up_required = ? 
-                 WHERE id = ?`,
-                [notes, followUpRequired ? 1 : 0, req.params.id]
-            );
-            
-            res.json({
-                success: true,
-                message: 'Notes updated successfully'
-            });
-        } catch (error) {
-            console.error('Error updating notes:', error);
-            res.status(500).json({
-                error: 'Failed to update notes'
+            res.status(500).json({ 
+                error: 'Failed to fetch analysis', 
+                message: error.message 
             });
         }
     }
