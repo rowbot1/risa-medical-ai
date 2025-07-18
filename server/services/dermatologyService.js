@@ -10,6 +10,8 @@ class DermatologyService {
         this.models = {
             // Main skin cancer classification model (available via Inference API)
             skinCancer: 'Anwarkh1/Skin_Cancer-Image_Classification',
+            // LLaVA model for comprehensive analysis
+            llava: 'llava-hf/llava-1.5-7b-hf',
             // Acne detection model
             acne: 'imfarzanansari/skintelligent-acne',
             // Skin type detection
@@ -98,7 +100,7 @@ Additional patient information: ${additionalInfo || 'None provided'}
 Please be thorough but concise. Format your response clearly.`;
 
         // For now, return a mock response while we debug the API
-        const USE_MOCK = false;
+        const USE_MOCK = true;
         
         if (USE_MOCK) {
             console.log('Using mock response for testing');
@@ -189,7 +191,7 @@ Note: This is a mock analysis for testing purposes.`,
     // Screen for skin cancer
     async screenForSkinCancer(base64Image) {
         // Mock response for testing
-        const USE_MOCK = true;
+        const USE_MOCK = false;
         
         if (USE_MOCK) {
             console.log('Using mock cancer screening response');
