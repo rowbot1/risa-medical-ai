@@ -481,6 +481,15 @@
                     body: formData
                 });
 
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Response not OK:', errorText);
+                    throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+                }
+
                 const result = await response.json();
                 
                 if (result.success) {
@@ -490,6 +499,11 @@
                 }
             } catch (error) {
                 console.error('Analysis error:', error);
+                console.error('Error details:', {
+                    message: error.message,
+                    response: error.response,
+                    stack: error.stack
+                });
                 alert('Error analyzing image: ' + error.message);
             } finally {
                 document.getElementById('loadingSpinner').style.display = 'none';
