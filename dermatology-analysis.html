@@ -353,6 +353,34 @@
 
     <script src="api.js"></script>
     <script>
+        // Admin auth check
+        (function() {
+            const token = localStorage.getItem('authToken');
+            const userType = localStorage.getItem('userType');
+            
+            if (!token || userType !== 'admin') {
+                console.log('Not authenticated as admin, redirecting...');
+                window.location.href = '/admin-login.html';
+                return;
+            }
+            
+            // Verify token is still valid
+            fetch('/api/auth/check', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }).then(response => {
+                if (!response.ok) {
+                    console.log('Token invalid, redirecting to login...');
+                    localStorage.clear();
+                    window.location.href = '/admin-login.html';
+                }
+            }).catch(error => {
+                console.error('Auth check failed:', error);
+            });
+        })();
+    </script>
+    <script>
         let selectedFile = null;
 
         // Setup upload area
@@ -473,10 +501,19 @@
             analyzeBtn.disabled = true;
 
             try {
+                const token = localStorage.getItem('authToken');
+                console.log('Using token:', token ? 'Token present' : 'No token found');
+                
+                if (!token) {
+                    alert('Please login again. Your session has expired.');
+                    window.location.href = '/admin-login.html';
+                    return;
+                }
+                
                 const response = await fetch('/api/dermatology/analyze', {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                        'Authorization': `Bearer ${token}`
                     },
                     body: formData
                 });
