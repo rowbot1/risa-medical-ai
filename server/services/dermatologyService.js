@@ -38,27 +38,7 @@ class DermatologyService {
                 analyses: []
             };
 
-            // 1. General skin condition analysis with LLaVA
-            try {
-                const llavaAnalysis = await this.analyzewithLLaVA(base64Image, additionalInfo);
-                results.analyses.push({
-                    model: 'LLaVA Dermatology',
-                    type: 'comprehensive',
-                    ...llavaAnalysis
-                });
-            } catch (error) {
-                console.error('LLaVA analysis error:', error.response?.status, error.response?.data || error.message);
-                results.analyses.push({
-                    model: 'LLaVA Dermatology',
-                    type: 'comprehensive',
-                    diagnosis: 'Analysis temporarily unavailable',
-                    confidence: 'N/A',
-                    message: `Model error: ${error.response?.data?.error || error.message}`,
-                    recommendations: ['Please try again later or contact support']
-                });
-            }
-
-            // 2. Skin cancer screening
+            // 1. Skin cancer screening with real AI
             try {
                 const cancerScreening = await this.screenForSkinCancer(base64Image);
                 results.analyses.push({
@@ -101,7 +81,7 @@ Additional patient information: ${additionalInfo || 'None provided'}
 Please be thorough but concise. Format your response clearly.`;
 
         // For now, return a mock response while we debug the API
-        const USE_MOCK = true;
+        const USE_MOCK = false;
         
         if (USE_MOCK) {
             console.log('Using mock response for testing');
@@ -287,24 +267,27 @@ Note: This is a mock analysis for testing purposes.`,
     parseCancerScreeningResults(response) {
         if (Array.isArray(response)) {
             // Classification results
-            const topResults = response.slice(0, 3).map(r => ({
+            const topResults = response.slice(0, 5).map(r => ({
                 label: this.formatCancerLabel(r.label),
-                confidence: (r.score * 100).toFixed(1) + '%'
+                confidence: (r.score * 100).toFixed(1) + '%',
+                score: r.score
             }));
 
             const highestRisk = response[0];
             const riskLevel = highestRisk.score > 0.7 ? 'High' : 
                             highestRisk.score > 0.4 ? 'Moderate' : 'Low';
 
+            // Generate detailed diagnosis based on top finding
+            const primaryDiagnosis = this.generateDiagnosis(highestRisk);
+
             return {
                 screening: 'completed',
                 riskLevel: riskLevel,
                 topFindings: topResults,
-                recommendation: riskLevel === 'High' ? 
-                    'Urgent dermatology referral recommended' :
-                    riskLevel === 'Moderate' ?
-                    'Consider dermatology referral for further evaluation' :
-                    'Low risk detected, routine monitoring advised'
+                primaryDiagnosis: primaryDiagnosis,
+                recommendation: this.generateRecommendation(highestRisk, riskLevel),
+                differentialDiagnosis: this.generateDifferentials(topResults),
+                clinicalFeatures: this.generateClinicalFeatures(highestRisk.label)
             };
         }
 
@@ -312,6 +295,61 @@ Note: This is a mock analysis for testing purposes.`,
             screening: 'completed',
             results: response
         };
+    }
+
+    // Generate diagnosis based on classification
+    generateDiagnosis(result) {
+        const label = result.label.toLowerCase();
+        const confidence = (result.score * 100).toFixed(0);
+        
+        const diagnoses = {
+            'melanoma': `Melanoma suspected (${confidence}% confidence). This is a serious form of skin cancer that requires immediate attention.`,
+            'melanocytic_nevi': `Melanocytic Nevus detected (${confidence}% confidence). This appears to be a benign mole.`,
+            'basal_cell_carcinoma': `Basal Cell Carcinoma suspected (${confidence}% confidence). This is the most common form of skin cancer.`,
+            'actinic_keratosis': `Actinic Keratosis detected (${confidence}% confidence). This is a precancerous condition.`,
+            'benign_keratosis': `Benign Keratosis identified (${confidence}% confidence). This is a non-cancerous skin growth.`,
+            'dermatofibroma': `Dermatofibroma detected (${confidence}% confidence). This is a benign skin lesion.`,
+            'vascular_lesions': `Vascular Lesion identified (${confidence}% confidence). This appears to be a blood vessel-related skin condition.`
+        };
+        
+        return diagnoses[label] || `${this.formatCancerLabel(result.label)} detected with ${confidence}% confidence.`;
+    }
+
+    // Generate recommendations based on findings
+    generateRecommendation(result, riskLevel) {
+        const label = result.label.toLowerCase();
+        
+        if (label.includes('melanoma') || riskLevel === 'High') {
+            return 'URGENT: Schedule immediate dermatology appointment. This lesion requires professional evaluation within 1-2 weeks.';
+        } else if (label.includes('carcinoma') || label.includes('actinic')) {
+            return 'Schedule dermatology appointment within 2-4 weeks for further evaluation and possible biopsy.';
+        } else if (riskLevel === 'Moderate') {
+            return 'Consider dermatology referral for professional evaluation. Monitor for any changes in size, color, or symptoms.';
+        } else {
+            return 'Low risk detected. Continue routine skin monitoring. Schedule annual dermatology check-up. Seek immediate care if lesion changes.';
+        }
+    }
+
+    // Generate differential diagnoses
+    generateDifferentials(topResults) {
+        return topResults.slice(1, 4).map(result => 
+            `${result.label} (${result.confidence} likelihood)`
+        );
+    }
+
+    // Generate clinical features based on diagnosis
+    generateClinicalFeatures(label) {
+        const features = {
+            'melanoma': ['Asymmetric shape', 'Irregular borders', 'Multiple colors', 'Diameter > 6mm', 'Evolving appearance'],
+            'melanocytic_nevi': ['Symmetric shape', 'Regular borders', 'Uniform color', 'Stable appearance'],
+            'basal_cell_carcinoma': ['Pearly or waxy appearance', 'Raised borders', 'Central depression', 'Visible blood vessels'],
+            'actinic_keratosis': ['Rough, scaly patch', 'Red or pink base', 'Crusty surface', 'Sun-exposed areas'],
+            'benign_keratosis': ['Waxy appearance', 'Stuck-on look', 'Well-demarcated', 'Variable pigmentation'],
+            'dermatofibroma': ['Firm nodule', 'Dimple sign positive', 'Brown-red color', 'Well-defined'],
+            'vascular_lesions': ['Red or purple color', 'Blanches with pressure', 'Smooth surface', 'Variable size']
+        };
+        
+        return features[label.toLowerCase()] || ['Further clinical examination recommended'];
     }
 
     // Format cancer type labels
