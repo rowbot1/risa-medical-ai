@@ -276,6 +276,10 @@ Note: This is a mock analysis for testing purposes.`,
             const highestRisk = response[0];
             const riskLevel = highestRisk.score > 0.7 ? 'High' : 
                             highestRisk.score > 0.4 ? 'Moderate' : 'Low';
+            
+            // Add warning if confidence is low
+            const confidenceWarning = highestRisk.score < 0.5 ? 
+                'LOW CONFIDENCE: This analysis has low confidence and should not be relied upon. Please consult a dermatologist.' : null;
 
             // Generate detailed diagnosis based on top finding
             const primaryDiagnosis = this.generateDiagnosis(highestRisk);
@@ -287,7 +291,9 @@ Note: This is a mock analysis for testing purposes.`,
                 primaryDiagnosis: primaryDiagnosis,
                 recommendation: this.generateRecommendation(highestRisk, riskLevel),
                 differentialDiagnosis: this.generateDifferentials(topResults),
-                clinicalFeatures: this.generateClinicalFeatures(highestRisk.label)
+                clinicalFeatures: this.generateClinicalFeatures(highestRisk.label),
+                confidenceWarning: confidenceWarning,
+                modelInfo: 'Analysis by Hugging Face AI model. Accuracy varies and false positives/negatives are possible.'
             };
         }
 

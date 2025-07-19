@@ -226,9 +226,21 @@
     </header>
 
     <div class="dermatology-container">
-        <h1 style="text-align: center; margin-bottom: 2rem;">
+        <h1 style="text-align: center; margin-bottom: 1rem;">
             <i class="fas fa-microscope"></i> AI-Powered Skin Analysis
         </h1>
+        
+        <!-- Important Disclaimer -->
+        <div style="background: #FED7D7; border: 2px solid #E53E3E; padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem;">
+            <h3 style="color: #742A2A; margin-bottom: 0.5rem;">
+                <i class="fas fa-exclamation-triangle"></i> Important Medical Disclaimer
+            </h3>
+            <p style="color: #742A2A; margin: 0;">
+                This AI system is for <strong>educational and screening purposes only</strong>. It is NOT a substitute for professional medical diagnosis. 
+                AI models can make mistakes and may misclassify skin conditions. Always consult a qualified dermatologist for accurate diagnosis and treatment. 
+                Never make medical decisions based solely on AI analysis.
+            </p>
+        </div>
 
         <!-- Upload Section -->
         <div class="upload-section">
@@ -615,27 +627,71 @@ ${analysis.fullAnalysis}
                     html += `
                         <div class="diagnosis-card" style="margin-top: 2rem;">
                             <h3 style="color: #E53E3E; margin-bottom: 1rem;">
-                                <i class="fas fa-shield-alt"></i> Cancer Screening
+                                <i class="fas fa-shield-alt"></i> AI Skin Analysis Results
                             </h3>
-                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                                <strong>Risk Level:</strong>
-                                <span class="confidence-badge confidence-${analysis.riskLevel.toLowerCase()}">
-                                    ${analysis.riskLevel}
-                                </span>
-                            </div>
-                            ${analysis.topFindings ? `
-                                <div style="margin: 1rem 0;">
-                                    <strong>Findings:</strong>
-                                    ${analysis.topFindings.map(f => 
-                                        `<div style="margin: 0.5rem 0;">
-                                            ${f.label}: ${f.confidence}
-                                        </div>`
-                                    ).join('')}
+                            
+                            ${analysis.confidenceWarning ? `
+                                <div style="background: #FEF3C7; border: 1px solid #F59E0B; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+                                    <i class="fas fa-exclamation-circle" style="color: #F59E0B;"></i>
+                                    <strong style="color: #92400E;">${analysis.confidenceWarning}</strong>
                                 </div>
                             ` : ''}
-                            <div class="recommendations" style="margin-top: 1rem;">
-                                <p>${analysis.recommendation}</p>
+                            
+                            ${analysis.primaryDiagnosis ? `
+                                <div style="background: #F7FAFC; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+                                    <strong>Primary Analysis:</strong>
+                                    <p style="margin-top: 0.5rem;">${analysis.primaryDiagnosis}</p>
+                                </div>
+                            ` : ''}
+                            
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                <strong>Risk Assessment:</strong>
+                                <span class="confidence-badge confidence-${analysis.riskLevel.toLowerCase()}">
+                                    ${analysis.riskLevel} Risk
+                                </span>
                             </div>
+                            
+                            ${analysis.topFindings ? `
+                                <div style="margin: 1rem 0;">
+                                    <strong>AI Confidence Scores:</strong>
+                                    <div style="background: #F7FAFC; padding: 1rem; border-radius: 0.5rem; margin-top: 0.5rem;">
+                                        ${analysis.topFindings.map((f, i) => 
+                                            `<div style="margin: 0.5rem 0; ${i === 0 ? 'font-weight: bold;' : ''}">
+                                                ${i === 0 ? '→ ' : '  '}${f.label}: ${f.confidence}
+                                            </div>`
+                                        ).join('')}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            ${analysis.clinicalFeatures && analysis.clinicalFeatures.length > 0 ? `
+                                <div style="margin: 1rem 0;">
+                                    <strong>Observed Features:</strong>
+                                    <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                                        ${analysis.clinicalFeatures.map(f => `<li>${f}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                            
+                            ${analysis.differentialDiagnosis && analysis.differentialDiagnosis.length > 0 ? `
+                                <div style="margin: 1rem 0;">
+                                    <strong>Other Possibilities:</strong>
+                                    <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                                        ${analysis.differentialDiagnosis.map(d => `<li>${d}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                            
+                            <div class="recommendations" style="margin-top: 1rem; background: #EBF8FF; padding: 1rem; border-radius: 0.5rem;">
+                                <strong>Recommendation:</strong>
+                                <p style="margin-top: 0.5rem;">${analysis.recommendation}</p>
+                            </div>
+                            
+                            ${analysis.modelInfo ? `
+                                <p style="font-size: 0.875rem; color: #718096; margin-top: 1rem; text-align: center;">
+                                    <i class="fas fa-info-circle"></i> ${analysis.modelInfo}
+                                </p>
+                            ` : ''}
                         </div>
                     `;
                 }
